@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
+
+:root {
+  --text-color-secondary: #fff;
+  --font-family-stack: Quicksand, Courier, monospace;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-stack);
+
+  &:has(.sidebar.nav_open) {
+    overflow: hidden;
+  }
+}
+
+h1:not([class*="text-"]) {
+  font-size: clamp(1.5rem, 0.8077rem + 2.0513vw, 2.5rem) !important;
+}
+
+.border-red {
+  border: 1px solid red;
+}
+
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//   }
+// }
+
+.border-break {
+  border-top: 1px solid #d1d7dc;
+}
+
+// arrow react carousel
+.control-next {
+  background-color: #2d2f31 !important;
+  color: #fff !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  bottom: unset !important;
+}
+
+.control-prev {
+  background-color: #2d2f31 !important;
+  color: #fff !important;
+  top: 50% !important;
+  transform: translateY(50%) !important;
+  bottom: unset !important;
+}
