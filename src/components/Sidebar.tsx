@@ -20,7 +20,7 @@ export default function Sidebar({
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className={`sidebar fixed left-0 top-0 z-[20] h-full w-4/12 overflow-y-scroll transition-all duration-300 ${isOpen ? "nav_open visible translate-x-[0] opacity-100" : "nav_close invisible -translate-x-[100%] opacity-0"}`}>
+          className={`sidebar fixed left-0 top-0 z-[20] h-full w-6/12 overflow-y-scroll transition-all duration-300 ${isOpen ? "nav_open visible translate-x-[0] opacity-100" : "nav_close invisible -translate-x-[100%] opacity-0"}`}>
           <div className="bg-[#f7f9fa] p-4 transition-all duration-300">
             <div className="flex items-center">
               <div className="flex w-[95%] items-center gap-3">

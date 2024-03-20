@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Provider from "@/redux/StoreProvider";
+import { SWRConfig } from "swr";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "@/styles/globals.scss";
 
@@ -15,11 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider>
-        <body>
-          {children}
-        </body>
-      </Provider>
+  
+        <Provider>
+          <body>{children}</body>
+        </Provider>
+
     </html>
   );
 }

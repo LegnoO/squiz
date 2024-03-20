@@ -8,7 +8,7 @@ export default function Search() {
 
   return (
     <>
-      <div className="bg-gray-250 relative mr-4 flex flex-1 items-center gap-4 rounded-full border border-[#2d2f31] bg-[#f7f9fa] p-2">
+      <div className="bg-gray-250 relative mr-4 flex flex-1 h-[3rem] items-center gap-4 rounded-full border border-[#2d2f31] bg-[#f7f9fa] p-3">
         <input
           onChange={(event) => {
             setSearchValue(event.target.value);

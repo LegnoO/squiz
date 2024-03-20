@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <div className="border-break bg-[#0a092d]">
+      <div className="h-full border-break bg-[#0a092d]">
         <div className="container px-6 py-16">
           <div className="grid grid-cols-2 gap-5 lg:grid-cols-3 xl:grid-cols-4">
             <div className="font-bold text-[#f6f7fb]">

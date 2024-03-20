@@ -28,6 +28,11 @@ body {
   }
 }
 
+.link-underline {
+  text-underline-offset: 0.4rem;
+  text-decoration: underline;
+}
+
 h1:not([class*="text-"]) {
   font-size: clamp(1.5rem, 0.8077rem + 2.0513vw, 2.5rem) !important;
 }
@@ -60,4 +65,23 @@ h1:not([class*="text-"]) {
   top: 50% !important;
   transform: translateY(50%) !important;
   bottom: unset !important;
+}
+
+.popper-animation {
+  transition-duration: 300ms;
+  animation: popper-module--pop-in--UYCRb 100ms cubic-bezier(0.2, 0, 0.38, 0.9)
+    forwards;
+}
+
+@keyframes PopperHover {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    display: none;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    display: block;
+  }
 }
