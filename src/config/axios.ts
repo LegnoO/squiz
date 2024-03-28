@@ -1,54 +1,61 @@
 import axios, { AxiosError } from "axios";
-import { GetServerSidePropsContext } from "next";
-import Router from "next/router";
 
-const baseURL = process.env.BASE_URL;
-let accessToken = "";
-const isServer = typeof window === "undefined";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const api = axios.create({
-  baseURL,
+const AxiosInstance = axios.create({
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // to send cookie
 });
 
-export const setAccessToken = (_accessToken: string) => {
-  accessToken = _accessToken;
+const refreshToken = async (): Promise<string> => {
+  try {
+    const refreshToken: string = localStorage.getItem("refreshToken")!;
+    const response = await AxiosInstance.post(`${API_URL}/auth/refresh`, {
+      refreshToken,
+    });
+    const newAccessToken = response.data.access_token;
+    localStorage.setItem("jwt", newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const getAccessToken = () => accessToken;
+AxiosInstance.interceptors.request.use((config) => {
+  const accessToken: string = localStorage.getItem("jwt")!;
 
-
-api.interceptors.request.use((config) => {
-  console.log("axios request")
-  if (accessToken) {
+  if (accessToken && !config.headers.Authorization) {
+    console.log(config.headers);
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return config;
 });
 
-
-api.interceptors.response.use(
+AxiosInstance.interceptors.response.use(
   (response) => {
-    console.log("axios response")
-    // Modify the response data here
     return response;
   },
-  (error: AxiosError) => {
-    // Handle response errors here
-    // check conditions to refresh token
-    // if (
-    //   error.response?.status === 401 &&
-    //   !error.response?.config?.url?.includes("auth/refresh") &&
-    //   !error.response?.config?.url?.includes("signin")
-    // ) {
-    //   return refreshToken(error);
-    // }
+  async (error: AxiosError) => {
+    if (
+      error.response?.status === 401 &&
+      error.config &&
+      !error.response?.config?.url?.includes("signin") &&
+      !error.response?.config?.url?.includes("auth/refresh")
+    ) {
+      try {
+        const newAccessToken = await refreshToken();
+        error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return axios.request(error.config);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+    }
     return Promise.reject(error);
   },
 );
 
-export default api;
+export default AxiosInstance;

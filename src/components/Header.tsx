@@ -28,10 +28,11 @@ const Header = () => {
 
   return (
     <>
-      <div className="relative z-20 hidden px-6 shadow-md md:flex">
-        <div className="flex w-full items-center gap-4">
-          <div className="my-auto">
-            {/* <Image
+      <div className="relative z-20 hidden bg-[--background-primary-main] px-4 shadow-md md:flex">
+        <div className="flex w-full items-center justify-between gap-4">
+          <div className="font-large flex items-center gap-4 text-primary">
+            <div className="my-auto">
+              {/* <Image
             // src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
             src={logo}
             width={91}
@@ -39,23 +40,24 @@ const Header = () => {
             loading="lazy"
             className="object-cover"
           /> */}
-            <Link href="/">
-              <h1 className="md:text-xl">SQUIZ</h1>
-            </Link>
+              <Link href="/">
+                <h1 className="text-lg font-medium xl:text-2xl">SQUIZ</h1>
+              </Link>
+            </div>
+            <ul className="flex items-center gap-4 text-sm text-primary">
+              <li>
+                <button>Trang chủ</button>
+              </li>
+              <li>
+                <button>Khóa học của tôi</button>
+              </li>
+              <li>
+                <button>Chuyên mục</button>
+              </li>
+            </ul>
           </div>
-          <ul className="flex items-center gap-4 text-sm text-primary">
-            <li>
-              <button>Trang chủ</button>
-            </li>
-            <li>
-              <button>Khóa học của tôi</button>
-            </li>
-            <li>
-              <button>Chuyên mục</button>
-            </li>
-          </ul>
-          <Search />
-          <div className="flex h-[4rem] items-center gap-4 pr-2">
+
+          <div className="flex h-[4.5rem] items-center gap-4 pr-2">
             <button>
               <BsPlus className="h-9 w-9 rounded-full bg-[#4255ff] text-sm text-white" />
             </button>
@@ -64,10 +66,10 @@ const Header = () => {
                 <span className="absolute -top-3.5 left-1/2 h-5 w-5 rounded-full bg-[red] text-center text-xs font-medium leading-[1.9] text-white">
                   7
                 </span>
-                <GrNotification className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg" />
+                <GrNotification className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-white" />
               </button>
             </div>
-            <div className="group relative h-[70px] cursor-pointer flex items-center">
+            <div className="group relative flex h-[70px] cursor-pointer items-center">
               <Image
                 src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625"
                 className="rounded-full"

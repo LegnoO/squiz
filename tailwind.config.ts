@@ -25,10 +25,9 @@ const config: Config = {
         },
       },
       colors: {
-        primary: "#2d2f31",
-        secondary: "var(--text-color-secondary)",
+        primary: "var(--color-primary-main)",
+        secondary: "var(--color-secondary-main)",
       },
-	
     },
   },
   plugins: [],

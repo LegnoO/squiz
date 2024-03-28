@@ -1,84 +1,122 @@
 "use client";
-import { Suspense, useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
-import { useState } from "react";
-import { isEmptyString } from "@/utils/stringEmpty";
-import { loginUser } from "@/actions/auth";
-import ButtonSubmit from "@/components/ButtonSubmit";
-import useSWR from "swr";
+// Hook
+import { useState, useRef, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
+// Icons
+import { FcGoogle } from "react-icons/fc";
+// Components
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+// Utils
+import { isEmptyString } from "@/utils/stringEmpty";
+// Services
+import { userLogin, getUserInfo } from "@/services/auth";
+import { updateInfoUser } from "@/redux/features/userSlice";
 
-export default function Login() {
-  const [userName, setUserName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+const Login = ({}) => {
+  const emailFieldRef = useRef<HTMLInputElement>(null);
+  const passwordFieldRef = useRef<HTMLInputElement>(null);
+  const [email, setEmail] = useState<string>("legno@gmail.com");
+  const [password, setPassword] = useState<string>("admin");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const user = useAppSelector((state) => state.user.userInfo);
+  console.log(user);
 
-  const [state, formAction] = useFormState(loginUser, { token: "" });
+  const handleLoginGoogle = () => {};
 
-  // const { data, error, isLoading } = useSWR(
-  //   "https://jsonplaceholder.typicode.com/todos",
-  // );
-  async function fetchData() {
-    const res = await fetch("https://sgarden-v2.onrender.com/order", {
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRpbm5lIiwic3ViIjoiNjVlOGNiMzg5ZThjMTgzMGEyNzQ0ZDhjIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzEwNzMxMTYyLCJleHAiOjE3MTA4MTc1NjJ9.wA4_GW6Ntkw0xcmcW_E-T4VumHJnHGKOO-qY0U4axmU`,
-      },
-    });
-    return await res.json();
-  }
+  const handleSubmit = async () => {
+    console.log(user);
+    setIsLoading(true);
+    const { data } = await userLogin({ email, password });
+    setIsLoading(false);
+    if (data) {
+      // const data = await getUserInfo();
+      dispatch(
+        updateInfoUser({
+          userInfo: {
+            name: { first_name: "test", last_name: "test" },
+            birthday: new Date(),
+            phone_number: "test",
+            email: "test",
+            username: "test",
+            password: "test",
+            avatar: "test",
+            role: "teacher",
+            courses: [],
+          },
+        }),
+      );
+      router.push("/");
+    }
+  };
 
   return (
-    <>
-      <form
-        className="mx-auto w-full md:max-w-[30rem] max-w-[35rem] px-[4.8rem] py-[2.4rem]"
-        action={formAction}>
-        <div className="bg-white">
-          <h1 className="text-medium mb-3 text-base font-bold text-primary">
+    <div className="py-8">
+      <form className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]">
+        <div className="">
+          <h1 className="text-medium mb-3 text-base font-bold text-[--color-primary-dark]">
             Đăng nhập vào tài khoản SQuiz của bạn
           </h1>
-          <div className="group relative mb-3 md:w-auto border border-[#2d2f31]">
-            <input
-              name="username"
+          <div className="border-1 mb-3 rounded border border-[#2d2f31] py-3 hover:bg-gray-200">
+            <button className="flex items-center gap-2 px-4">
+              <FcGoogle className="h-[2rem] w-[2rem]" />
+              <p className="text-medium text-base font-bold text-[--color-primary-dark]">
+                Tiếp tục bằng tài khoản Google
+              </p>
+            </button>
+          </div>
+          <div className="group relative mb-3 rounded md:w-auto">
+            <Input
+              required
+              ref={emailFieldRef}
+              value={email}
+              name="email"
               type="text"
               id="email-input"
               spellCheck={false}
-              className="h-[55px] w-full px-4 pb-4 pt-5 font-medium text-primary md:w-auto"
-              onChange={(event) => {
-                setUserName(event.target.value);
-              }}
+              className={`text-[--color-primary-dark] outline-1 outline-[#2d2f31]`}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <label
-              className={`pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 select-none font-bold transition-[transform,font-size] duration-300 group-focus-within:-translate-y-[1.8rem] group-focus-within:font-medium ${!isEmptyString(userName) ? "-translate-y-[1.8rem] font-medium" : ""}`}
+              className={`pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 select-none font-medium transition-[transform,font-size] duration-300 group-focus-within:-translate-y-[1.8rem] group-focus-within:font-medium ${!isEmptyString(email) ? "-translate-y-[1.8rem] font-medium" : ""}`}
               htmlFor="email-input">
               <span
-                className={`px-4 text-sm duration-300 group-focus-within:text-xs ${!isEmptyString(userName) ? "text-xs" : ""}`}>
-                Username
+                className={`px-4 text-sm text-gray-500 duration-300 group-focus-within:text-xs `}>
+                Email
               </span>
             </label>
           </div>
-          <div className="group relative mb-3 md:w-auto border border-[#2d2f31]">
-            <input
+
+          <div className="group relative mb-3 rounded md:w-auto">
+            <Input
+              required
+              ref={passwordFieldRef}
+              value={password}
               name="password"
               type="password"
-              id="email-input"
+              id="password-input"
               spellCheck={false}
-              className="h-[55px] w-full px-4 pb-4 pt-5 md:w-auto"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
+              className={`text-[--color-primary-dark] outline-1 outline-[#2d2f31]`}
+              onChange={(event) => setPassword(event.target.value)}
             />
+
             <label
-              className={`pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 font-bold transition-[transform,font-size] duration-300 group-focus-within:-translate-y-[1.8rem] group-focus-within:font-medium ${!isEmptyString(password) ? "-translate-y-[1.8rem] font-medium" : ""}`}
+              className={`pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 select-none font-medium transition-[transform,font-size] duration-300 group-focus-within:-translate-y-[1.8rem] group-focus-within:font-medium ${!isEmptyString(password) ? "-translate-y-[1.8rem] font-medium" : ""}`}
               htmlFor="email-input">
               <span
-                className={`select-none px-4 text-sm duration-300 group-focus-within:text-xs ${!isEmptyString(password) ? "text-xs" : ""}`}>
+                className={`px-4 text-sm text-gray-500 duration-300 group-focus-within:text-xs`}>
                 Password
               </span>
             </label>
           </div>
           <div className="mb-3 mt-5">
-            <ButtonSubmit>Đăng nhập</ButtonSubmit>
+            <Button onClick={handleSubmit} isLoading={isLoading}>
+              Đăng nhập
+            </Button>
           </div>
           <div className="mb-3 text-center">
             <p>
@@ -89,7 +127,7 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="border-break pt-3 text-center text-sm leading-6">
+          <div className="pt-3 text-center text-sm leading-6">
             <p>
               Bạn không có tài khoản?{" "}
               <span className="link-underline font-bold text-[#5624d0]">
@@ -98,12 +136,14 @@ export default function Login() {
             </p>
             <p>
               <span className="link-underline font-bold text-[#5624d0]">
-                <Link href="sigin"> Đăng nhập bằng tên tổ chức của bạn</Link>
+                <Link href="/signin"> Đăng nhập bằng tên tổ chức của bạn</Link>
               </span>
             </p>
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
-}
+};
+
+export default Login;

@@ -2,23 +2,20 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
 import { isEmptyString } from "@/utils/stringEmpty";
-import { loginUser } from "@/actions/auth";
-import ButtonSubmit from "@/components/ButtonSubmit";
+// import { loginUser } from "@/actions/auth";
+import ButtonSubmit from "@/components/Button";
 import Link from "next/link";
 
 export default function Login() {
   const [fullName, setFullName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { pending } = useFormStatus();
-
-  const [state, formAction] = useFormState(loginUser, { token: "" });
 
   return (
     <>
       <form
-        className="mx-auto w-full md:max-w-[30rem] max-w-[35rem] px-[4.8rem] py-[2.4rem]"
-        action={formAction}>
+        className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]"
+        >
         <div className="w-full bg-white">
           <h1 className="text-medium mb-3 text-base font-bold text-primary">
             Đăng ký và bắt đầu học
@@ -84,7 +81,7 @@ export default function Login() {
             </label>
           </div>
           <div className="mb-3 mt-5">
-            <ButtonSubmit>Đăng ký</ButtonSubmit>
+            {/* <ButtonSubmit>Đăng ký</ButtonSubmit> */}
           </div>
 
           <div className="border-break pt-3 text-center text-sm leading-6">

@@ -1,10 +1,10 @@
 export default function Footer() {
   return (
     <>
-      <div className="h-full border-break bg-[#0a092d]">
+      <div className="border-break bg-[--background-primary-main]">
         <div className="container px-6 py-16">
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-3 xl:grid-cols-4">
-            <div className="font-bold text-[#f6f7fb]">
+          <div className="grid grid-cols-2 gap-5 font-bold text-[--color-primary-main] lg:grid-cols-3 xl:grid-cols-4">
+            <div className="">
               <h5>Giới thiệu</h5>
               <div className="mt-6 text-sm font-medium">
                 <p className="mb-3">
@@ -16,7 +16,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="font-bold text-[#f6f7fb]">
+            <div className="">
               <h5>Giới thiệu</h5>
               <div className="mt-6 text-sm font-medium">
                 <p className="mb-3">
@@ -28,7 +28,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="font-bold text-[#f6f7fb]">
+            <div className="">
               <h5>Giới thiệu</h5>
               <div className="mt-6 text-sm font-medium">
                 <p className="mb-3">
@@ -40,7 +40,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="font-bold text-[#f6f7fb]">
+            <div className="">
               <h5>Giới thiệu</h5>
               <div className="mt-6 text-sm font-medium">
                 <p className="mb-3">
