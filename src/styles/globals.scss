@@ -21,18 +21,19 @@
 }
 
 :root {
-  --color-primary-main: #f6f7fb;
-  --color-primary-light: #;
-  --color-primary-dark: #2d2f31;
-  --color-secondary-main: #d9dde8;
-  --color-secondary-light: #;
-
-  --background-primary-main: #0a092d;
-  --background-primary-light: #;
+  // --color-primary-main: #f6f7fb;
+  --color-primary-main: #1f1f1f;
+  --color-secondary-main: #444746;
+  --color-text-link: #0b57d0;
+  // Background
+  --background-surface-color: #f0f4f9;
+  --background-primary-main: #fff;
+  --background-primary-color: #f0f4f9;
   --background-secondary-main: #2e3856;
   --background-secondary-light: #282e3e;
 
-  --border-primary-main: #586380;
+  --border-primary-main: #c4c7c5;
+  --border-secondary-main: #80868b;
   --border-primary-light: #939bb4;
 }
 
@@ -61,7 +62,7 @@ body {
   font-family: var(--font-family-stack);
   text-rendering: optimizeSpeed;
   height: 100%;
-
+  background-color: var(--background-surface-color);
   &:has(.sidebar.nav_open) {
     overflow: hidden;
   }
@@ -117,11 +118,17 @@ body {
   }
 }
 
-.font-large {
-  font-weight: 600;
-}
-
 .React-Quill-Root {
+  & .ql-toolbar {
+    border-top-right-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+  }
+
+  & .ql-container {
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+
   .ql-toolbar.ql-snow + .ql-container.ql-snow {
     border: 1px solid #ccc;
   }
@@ -134,45 +141,22 @@ body {
     margin-left: 1rem;
   }
 
+  &.field-active {
+    .ql-container {
+      border: 2px solid var(--color-success-dark) !important;
+
+      & .quill-checkbox {
+        color: #0f7101 !important;
+      }
+      & .button-delete:hover {
+        color: red !important;
+      }
+    }
+  }
+
   &.active {
     .quill-checkbox {
       display: none;
-    }
-  }
-
-  &.question-field {
-    & .ql-editor {
-      // color: var(--color-primary-main);
-    }
-    & .ql-editor.ql-blank:before {
-      color: #d1d5db;
-      font-style: normal;
-    }
-    & .ql-toolbar {
-      // background-color: var(--color-secondary-main);
-    }
-    & .ql-container.ql-snow {
-      // border-color: var(--border-primary-main);
-      // border-radius: 0.25rem;
-      // height: 10rem;
-    }
-  }
-
-  &.answer-field {
-    & .ql-editor {
-      // color: var(--color-primary-main);
-    }
-    & .ql-editor.ql-blank:before {
-      // color: #9ca3af;
-      // font-style: normal;
-    }
-    & .ql-toolbar {
-      // background-color: var(--color-secondary-main);
-    }
-    & .ql-container.ql-snow {
-      // border-color: var(--border-primary-main);
-      // border-radius: 0.25rem;
-      // height: 6rem;
     }
   }
 }

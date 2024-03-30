@@ -16,7 +16,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`flex h-[3rem] w-full items-center justify-center rounded bg-[#0666d0] px-4 transition duration-300 hover:bg-[#063cd0] ${className}`}
+      className={`flex h-[3rem] w-full items-center justify-center rounded bg-[--color-text-link] px-4 opacity-90 transition hover:opacity-100 ${className}`}
       type="button"
       disabled={isLoading}>
       {isLoading ? (

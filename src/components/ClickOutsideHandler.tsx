@@ -5,7 +5,7 @@ const ClickOutsideHandler = ({
   onOutsideClick,
 }: {
   children: React.ReactNode;
-  onOutsideClick: React.Dispatch<React.SetStateAction<boolean>>;
+  onOutsideClick: () => void;
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -13,7 +13,7 @@ const ClickOutsideHandler = ({
     const handleClickOutside = (event: MouseEvent) => {
       const targetNode = event.target as Node;
       if (wrapperRef.current && !wrapperRef.current.contains(targetNode)) {
-        onOutsideClick(false);
+        onOutsideClick();
       }
     };
 

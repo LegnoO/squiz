@@ -1,25 +1,28 @@
 "use client";
-
-import Image from "next/image";
+// Hooks
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+// Components
+import Image from "next/image";
+import Link from "next/link";
+import Search from "./Search";
+import Sidebar from "./Sidebar";
+import Popper from "@/components/Popper";
+// Icons
 import { BsPlus } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa6";
 import { GrNotification } from "react-icons/gr";
 import { IoIosMenu } from "react-icons/io";
 import { TfiSearch } from "react-icons/tfi";
-import { useMediaQuery } from "react-responsive";
-import Link from "next/link";
 
-import Search from "./Search";
-import Sidebar from "./Sidebar";
-import Popper from "@/components/Popper";
 
 const Header = () => {
   const [mobileNav, setMobileNav] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
-
+  const user = useAppSelector((state) => state.user.userInfo);
   const isMobileScreen = useMediaQuery({ query: "(max-width: 800px)" });
-
+console.log(user)
   useEffect(() => {
     if (!isMobileScreen) {
       setMobileNav(false);
@@ -28,10 +31,10 @@ const Header = () => {
 
   return (
     <>
-      <div className="relative z-20 hidden bg-[--background-primary-main] px-4 shadow-md md:flex">
+      <div className="relative z-20 hidden border-b-[0.0625rem] border-b-[--border-primary-main] bg-[--background-primary-main] px-4 shadow-sm md:flex">
         <div className="flex w-full items-center justify-between gap-4">
-          <div className="font-large flex items-center gap-4 text-primary">
-            <div className="my-auto">
+          <div className="flex items-center gap-4 text-primary">
+            <div className="my-auto mr-2">
               {/* <Image
             // src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg"
             src={logo}
@@ -41,10 +44,10 @@ const Header = () => {
             className="object-cover"
           /> */}
               <Link href="/">
-                <h1 className="text-lg font-medium xl:text-2xl">SQUIZ</h1>
+                <h1 className="text-lg font-semibold xl:text-2xl">SQUIZ</h1>
               </Link>
             </div>
-            <ul className="flex items-center gap-4 text-sm text-primary">
+            <ul className="flex items-center gap-4 text-sm font-semibold text-primary">
               <li>
                 <button>Trang chủ</button>
               </li>
@@ -66,10 +69,10 @@ const Header = () => {
                 <span className="absolute -top-3.5 left-1/2 h-5 w-5 rounded-full bg-[red] text-center text-xs font-medium leading-[1.9] text-white">
                   7
                 </span>
-                <GrNotification className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-white" />
+                <GrNotification className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-primary" />
               </button>
             </div>
-            <div className="group relative flex h-[70px] cursor-pointer items-center">
+            <div className="group relative flex h-[70px] cursor-pointer items-center rounded">
               <Image
                 src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625"
                 className="rounded-full"

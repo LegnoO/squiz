@@ -24,33 +24,37 @@ const Login = ({}) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useAppSelector((state) => state.user.userInfo);
-  console.log(user);
 
   const handleLoginGoogle = () => {};
 
   const handleSubmit = async () => {
-    console.log(user);
     setIsLoading(true);
     const { data } = await userLogin({ email, password });
+    const { access_token } = data;
     setIsLoading(false);
-    if (data) {
-      // const data = await getUserInfo();
-      dispatch(
-        updateInfoUser({
-          userInfo: {
-            name: { first_name: "test", last_name: "test" },
-            birthday: new Date(),
-            phone_number: "test",
-            email: "test",
-            username: "test",
-            password: "test",
-            avatar: "test",
-            role: "teacher",
-            courses: [],
-          },
-        }),
-      );
-      router.push("/");
+    if (access_token) {
+      const { data: dataResponse } = await getUserInfo();
+      const { data, message } = dataResponse;
+      // const res = userInfoResponse;
+      // if (data) {
+      //   dispatch(
+      //     updateInfoUser({
+      //       userInfo: {
+      //         name: { first_name: "test", last_name: "test" },
+      //         birthday: new Date(),
+      //         phone_number: "test",
+      //         email: "test",
+      //         username: "test",
+      //         password: "test",
+      //         avatar: "test",
+      //         role: "teacher",
+      //         courses: [],
+      //       },
+      //     }),
+      //   );
+      // }
+
+      // router.push("/");
     }
   };
 
@@ -58,13 +62,13 @@ const Login = ({}) => {
     <div className="py-8">
       <form className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]">
         <div className="">
-          <h1 className="text-medium mb-3 text-base font-bold text-[--color-primary-dark]">
+          <h1 className="text-medium mb-3 text-base font-bold text-primary">
             Đăng nhập vào tài khoản SQuiz của bạn
           </h1>
-          <div className="border-1 mb-3 rounded border border-[#2d2f31] py-3 hover:bg-gray-200">
+          <div className="mb-3 rounded border border-[--border-secondary-main] bg-[--background-primary-main] py-3 transition hover:bg-gray-100">
             <button className="flex items-center gap-2 px-4">
               <FcGoogle className="h-[2rem] w-[2rem]" />
-              <p className="text-medium text-base font-bold text-[--color-primary-dark]">
+              <p className="text-medium text-base font-bold text-primary">
                 Tiếp tục bằng tài khoản Google
               </p>
             </button>
@@ -78,7 +82,7 @@ const Login = ({}) => {
               type="text"
               id="email-input"
               spellCheck={false}
-              className={`text-[--color-primary-dark] outline-1 outline-[#2d2f31]`}
+              className={`text-primary outline-1 outline-[--border-secondary-main]`}
               onChange={(event) => setEmail(event.target.value)}
             />
             <label
@@ -100,7 +104,7 @@ const Login = ({}) => {
               type="password"
               id="password-input"
               spellCheck={false}
-              className={`text-[--color-primary-dark] outline-1 outline-[#2d2f31]`}
+              className={`text-primary outline-1 outline-[--border-secondary-main]`}
               onChange={(event) => setPassword(event.target.value)}
             />
 

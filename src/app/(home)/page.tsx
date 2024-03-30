@@ -10,7 +10,7 @@ import { CourseListData } from "@/FakeData/CourseList";
 export default function Home() {
   return (
     <>
-      <div className="border-break bg-[--background-primary-main]">
+      <div className="">
         <CourseList courseList={CourseListData} title="Đề thi" />
       </div>
     </>

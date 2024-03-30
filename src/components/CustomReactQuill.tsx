@@ -1,6 +1,6 @@
 "use client";
 import { DeltaStatic, Sources } from "quill";
-import React, { useRef, useEffect } from "react";
+import React, { memo, useRef, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { IoSaveOutline } from "react-icons/io5";
 import { RiDeleteBin7Line } from "react-icons/ri";
@@ -11,12 +11,15 @@ import ClickOutsideHandler from "@/components/ClickOutsideHandler";
 
 const CustomReactQuill = ({
   value,
+  setClose,
   onClick,
   classField,
   isTexting,
   setOpen,
   onChange,
-  test,
+  isChecked,
+  onDelete,
+  setChecked,
 }: {
   onChange: (
     value: string,
@@ -24,12 +27,17 @@ const CustomReactQuill = ({
     source: Sources,
     editor: ReactQuill.UnprivilegedEditor,
   ) => void;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClick: () => void;
+  setChecked: () => void;
+
+  setClose: () => void;
+  setOpen: () => void;
+  onClick?: () => void;
+  onDelete?: () => void;
   classField: "answer-field" | "question-field";
-  isTexting: boolean;
+  isTexting?: boolean;
   value: string;
-  test: boolean;
+  isChecked?: boolean;
+  testId?: string;
 }) => {
   const quillRef = useRef<any>(null);
 
@@ -49,75 +57,80 @@ const CustomReactQuill = ({
       ["clean"],
     ],
     clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
+      matchVisual: false, // toggle to add extra line breaks when pasting HTML:
     },
   };
+  
   useEffect(() => {
-    const toolbarDiv = document.querySelector(".ql-toolbar");
-    const containerElement = document.querySelector(".ql-container");
+    const containerElement = quillRef.current.getEditor().container;
+    const editorDiv = quillRef.current.getEditor().root;
+    const toolbarDiv = quillRef.current
+      .getEditor()
+      .container.parentNode.querySelector(".ql-toolbar");
+    const newSpanElement = document.createElement("span");
+    const newSpanElement2 = document.createElement("span");
+    const newButtonElement = document.createElement("button");
+    const newButtonSaveElement = document.createElement("button");
+    const newButtonDeleteElement = document.createElement("button");
+    const newSaveIconComponent = React.createElement(IoSaveOutline);
+    const newDeleteIconComponent = React.createElement(RiDeleteBin7Line);
+    const newCheckBoxIconComponent = React.createElement(IoIosCheckboxOutline);
+
+    toolbarDiv.appendChild(newSpanElement);
     if (quillRef.current && toolbarDiv && containerElement) {
+      // Add Classes
       toolbarDiv.classList.add("flex");
-      const newSpanElement = document.createElement("span");
-      const newSpanElement2 = document.createElement("span");
-      const newButtonElement = document.createElement("button");
-      const newButtonSaveElement = document.createElement("button");
-      const newButtonDeleteElement = document.createElement("button");
-      const newSaveIconComponent = React.createElement(IoSaveOutline);
-      const newDeleteIconComponent = React.createElement(RiDeleteBin7Line);
-      const newCheckBoxIconComponent =
-        React.createElement(IoIosCheckboxOutline);
-
-      newSpanElement.className = "ml-auto ql-formats !mr-[0.25rem]";
-      newSpanElement2.className = "ql-formats !mr-0";
-
-      newButtonSaveElement.className = "ql-clean";
-      newButtonSaveElement.onclick = (event) => {
-        event.stopPropagation();
-        setOpen(false);
-      };
-
-      newButtonDeleteElement.className = "ql-clean";
-      newButtonDeleteElement.onclick = (event) => {
-        event.stopPropagation();
-        setOpen(false);
-      };
-
-      toolbarDiv.appendChild(newSpanElement);
+      newSpanElement.className = "ql-formats !mr-0";
+      newSpanElement2.className = "ml-auto ql-formats !mr-[0.25rem]";
+      // Add span to .toolbar
       toolbarDiv.appendChild(newSpanElement2);
-
-      newSpanElement.appendChild(newButtonSaveElement);
+      toolbarDiv.appendChild(newSpanElement);
+      // Add button to span
       newSpanElement2.appendChild(newButtonDeleteElement);
-
-      createRoot(newButtonSaveElement).render(newSaveIconComponent); // icon save button
-
-      createRoot(newButtonDeleteElement).render(newDeleteIconComponent); // icon delete button
+      newSpanElement.appendChild(newButtonSaveElement);
+      // Button Delete
+      newButtonDeleteElement.classList.add("button-delete");
+      newButtonSaveElement.classList.add("button-save");
+      // Add icon to butotn
+      createRoot(newButtonSaveElement).render(newSaveIconComponent);
+      createRoot(newButtonDeleteElement).render(newDeleteIconComponent);
 
       containerElement.classList.add("relative");
+
+      containerElement.appendChild(newButtonElement);
       newButtonElement.onclick = (event) => {
         event.stopPropagation();
+        setChecked();
       };
-
       newButtonElement.className =
         "quill-checkbox absolute top-1/2 -translate-y-1/2 ml-[0.25rem] left-0 [&>svg]:h-[1.5rem] [&>svg]:w-[1.5rem]";
-      containerElement.appendChild(newButtonElement);
       createRoot(newButtonElement).render(newCheckBoxIconComponent);
+
+      newButtonSaveElement.className = "ql-clean text-[var(--color-info-dark)]";
+      newButtonSaveElement.onclick = (event) => {
+        event.stopPropagation();
+        // setOpen();
+      };
+
+      newButtonDeleteElement.className =
+        "ql-clean text-[var(--color-error-dark)]";
+      newButtonDeleteElement.onclick = (event) => {
+        event.stopPropagation();
+        if (onDelete) {
+          onDelete();
+        }
+      };
     }
   }, []);
-  console.log(test);
+
   return (
     <>
-      <ClickOutsideHandler onOutsideClick={setOpen}>
-        <div
-          onClick={() => {
-            setOpen(true);
-            test = true;
-            console.log(test);
-          }}>
+      <ClickOutsideHandler onOutsideClick={setClose}>
+        <div onClick={setOpen}>
           <ReactQuill
             ref={quillRef}
             modules={modules}
-            className={`${test ? "border border-red-700" : ""} React-Quill-Root ${classField} rounded ${!isTexting ? "[&>.ql-toolbar]:hidden" : "active"}`}
+            className={`React-Quill-Root ${classField} ${isChecked ? "field-active" : ""} rounded shadow-sm ${!isTexting ? "[&>.ql-toolbar]:hidden" : "active"}`}
             placeholder="Nhập câu trả lời vào đây"
             theme="snow"
             value={value}
@@ -129,4 +142,4 @@ const CustomReactQuill = ({
   );
 };
 
-export default CustomReactQuill;
+export default memo(CustomReactQuill);
