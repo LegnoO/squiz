@@ -11,8 +11,8 @@ const AxiosInstance = axios.create({
 
 const refreshToken = async (): Promise<string> => {
   try {
-    const refreshToken: string = localStorage.getItem("refreshToken")!;
-    const response = await AxiosInstance.post(`${API_URL}/auth/refresh`, {
+    const refreshToken: string = localStorage.getItem("refresh_token")!;
+    const response = await AxiosInstance.post(`${API_URL}/auth/user/refresh`, {
       refreshToken,
     });
     const newAccessToken = response.data.access_token;
@@ -27,7 +27,6 @@ AxiosInstance.interceptors.request.use((config) => {
   const accessToken: string = localStorage.getItem("jwt")!;
 
   if (accessToken && !config.headers.Authorization) {
-    console.log(config.headers);
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
@@ -43,10 +42,11 @@ AxiosInstance.interceptors.response.use(
       error.response?.status === 401 &&
       error.config &&
       !error.response?.config?.url?.includes("signin") &&
-      !error.response?.config?.url?.includes("auth/refresh")
+      !error.response?.config?.url?.includes("/auth/user/refresh")
     ) {
       try {
         const newAccessToken = await refreshToken();
+        console.log("refresh request")
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return axios.request(error.config);

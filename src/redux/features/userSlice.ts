@@ -1,33 +1,14 @@
+"use client";
 import type { RootState } from "@/redux/store";
+import { IUser } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface IUser {
-  userInfo: {
-    name: { first_name: string; last_name: string };
-    birthday: Date;
-    phone_number: string;
-    email: string;
-    username: string;
-    password: string;
-    avatar: string;
-    role: "teacher" | "student";
-    courses: string[];
-  };
-}
-
-
-const initialState: IUser = {
-  userInfo: {
-    name: { first_name: "", last_name: "" },
-    birthday: new Date(),
-    phone_number: "",
-    email: "",
-    username: "",
-    password: "",
-    avatar: "",
-    role: "teacher",
-    courses: [],
-  },
+type UserState = { userInfo: Partial<IUser | null> };
+const initialState: UserState = {
+  userInfo:
+    (typeof window !== "undefined" &&
+      JSON.parse(localStorage.getItem("userData")!)) ||
+    null,
 };
 
 export const userSlice = createSlice({
@@ -35,12 +16,18 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateInfoUser: (state, action: PayloadAction<IUser>) => {
-      state.userInfo = action.payload.userInfo;
+      state.userInfo = action.payload;
+    },
+    clearUserData: (state) => {
+      state.userInfo = null;
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("userData");
     },
   },
 });
 
-export const { updateInfoUser } = userSlice.actions;
+export const { clearUserData, updateInfoUser } = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selecUser = (state: RootState) => state.user;

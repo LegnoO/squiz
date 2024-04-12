@@ -7,7 +7,7 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 
 import { IoIosCheckboxOutline } from "react-icons/io";
 import ReactQuill from "react-quill";
-import ClickOutsideHandler from "@/components/ClickOutsideHandler";
+import ClickOutsideHandler from "@/components/ClickAwayListenerCustom";
 
 const CustomReactQuill = ({
   value,
@@ -60,7 +60,7 @@ const CustomReactQuill = ({
       matchVisual: false, // toggle to add extra line breaks when pasting HTML:
     },
   };
-  
+
   useEffect(() => {
     const containerElement = quillRef.current.getEditor().container;
     const editorDiv = quillRef.current.getEditor().root;

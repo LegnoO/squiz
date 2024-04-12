@@ -2,6 +2,7 @@
 
 # other
 /save.txt
+/run server.sh
 
 # dependencies
 /node_modules

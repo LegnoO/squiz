@@ -1,11 +1,11 @@
 import { useRef, useEffect } from "react";
 
-const ClickOutsideHandler = ({
+const ClickAwayListenerCustom = ({
   children,
-  onOutsideClick,
+  onClickAway,
 }: {
   children: React.ReactNode;
-  onOutsideClick: () => void;
+  onClickAway: () => void;
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -13,7 +13,9 @@ const ClickOutsideHandler = ({
     const handleClickOutside = (event: MouseEvent) => {
       const targetNode = event.target as Node;
       if (wrapperRef.current && !wrapperRef.current.contains(targetNode)) {
-        onOutsideClick();
+        if (onClickAway) {
+          onClickAway();
+        }
       }
     };
 
@@ -22,13 +24,17 @@ const ClickOutsideHandler = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="ClickOutSide-Component" ref={wrapperRef}>
+    <div
+      style={{ borderRadius: "inherit" }}
+      className="ClickAwayListenerCustom"
+      ref={wrapperRef}>
       {children}
     </div>
   );
 };
 
-export default ClickOutsideHandler;
+export default ClickAwayListenerCustom;
