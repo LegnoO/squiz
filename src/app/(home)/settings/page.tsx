@@ -34,7 +34,6 @@ export default function SettingPage() {
     //   phoneNumber,
     // });
     // if (data) {
-    //   console.log(data);
     //   dispatch(updateInfoUser(data));
     // }
   };

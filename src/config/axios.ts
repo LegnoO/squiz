@@ -1,3 +1,4 @@
+import { clearLocalUserData } from "@/redux/features/userSlice";
 import axios, { AxiosError } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -12,13 +13,19 @@ const AxiosInstance = axios.create({
 const refreshToken = async (): Promise<string> => {
   try {
     const refreshToken: string = localStorage.getItem("refresh_token")!;
-    const response = await AxiosInstance.post(`${API_URL}/auth/user/refresh`, {
-      refreshToken,
-    });
+    const response = await AxiosInstance.post(
+      `${API_URL}/auth/user/refresh`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      },
+    );
+
     const newAccessToken = response.data.access_token;
     localStorage.setItem("jwt", newAccessToken);
     return newAccessToken;
   } catch (error) {
+    clearLocalUserData()
     throw error;
   }
 };
@@ -38,6 +45,7 @@ AxiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    console.log("error");
     if (
       error.response?.status === 401 &&
       error.config &&
@@ -45,8 +53,8 @@ AxiosInstance.interceptors.response.use(
       !error.response?.config?.url?.includes("/auth/user/refresh")
     ) {
       try {
+        console.log("try");
         const newAccessToken = await refreshToken();
-        console.log("refresh request")
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return axios.request(error.config);

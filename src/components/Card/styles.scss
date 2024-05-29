@@ -1,0 +1,20 @@
+.card-root {
+    background-color: var(--paper-bg-color);
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 0.15rem;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
+    overflow: hidden;
+    min-width: 100px;
+    width: fit-content;
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .card-actions {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+    }
+}

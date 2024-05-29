@@ -45,7 +45,6 @@ const ForgotPassword = ({}) => {
 
     if (step === 1) {
       const { message } = await forgotPassword({ email });
-      console.log(message);
       if (message) {
         setMessageField(() => {
           return { success: "Mã OTP đã được gửi đến email của bạn." };
@@ -82,7 +81,6 @@ const ForgotPassword = ({}) => {
           newPassword,
           confirmNewPassword: confirmPassword,
         });
-        console.log({ error, message });
         if (message) {
           setMessageField(() => {
             return { success: message };

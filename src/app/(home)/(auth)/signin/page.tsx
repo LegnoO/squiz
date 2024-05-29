@@ -52,7 +52,7 @@ const Login = ({}) => {
   };
 
   return (
-    <div className="bg-[--background-primary-main] py-12">
+    <div className="bg-background py-12">
       <form className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]">
         <div className="">
           <h1 className="text-medium mb-3 text-base font-bold text-primary">
@@ -125,7 +125,7 @@ const Login = ({}) => {
             </p>
           </div>
 
-          <div className="mt-6 border-t border-t-[--border-primary-main] pt-3 text-center text-sm leading-6">
+          <div className="text-primary mt-6 border-t border-t-[--border-primary-main] pt-3 text-center text-sm leading-6">
             <p>
               Bạn không có tài khoản?{" "}
               <span className="link-underline font-bold text-[#5624d0]">

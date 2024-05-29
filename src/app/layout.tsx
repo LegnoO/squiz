@@ -5,9 +5,9 @@ import { Suspense } from "react";
 import Provider from "@/redux/StoreProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "@/styles/globals.scss";
+import "@/app/styles/globals.scss";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "react-quill/dist/quill.snow.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",

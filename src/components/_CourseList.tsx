@@ -14,9 +14,11 @@ import { CourseListType } from "@/types/course";
 export default function CourseList({
   courseList,
   onClick,
+  setId,
 }: {
-  courseList: any;
-  onClick: (id: string) => void;
+  courseList: CourseListType;
+  onClick: () => void;
+  setId?: Dispatch<SetStateAction<string | number>>;
 }) {
   return (
     <>
@@ -26,24 +28,13 @@ export default function CourseList({
         </div>
         <div className="grid grid-cols-2 gap-8 px-4 font-medium transition-all md:grid-cols-3 md:px-0 xl:grid-cols-4">
           {courseList.map((course, index) => {
-            const { name, _id } = course;
+            const { name, owner, link } = course;
             return (
               <div
                 key={index}
-                className="h-[22.5rem] rounded border-[0.125rem] border-[border-primary-main] bg-[--background-primary-main] shadow transition duration-300">
+                className="h-[24.5rem] rounded border-[0.125rem] border-[border-primary-main] bg-[--background-primary-main] shadow transition duration-300">
                 <div className="mb-3 flex h-full flex-col text-[0.9375rem] font-semibold text-primary">
                   <Link className="relative" href="">
-                    <div className="absolute bottom-0 left-0 h-[4rem] w-[4rem] translate-x-[40%] translate-y-[50%] overflow-hidden border border-[#E1E1E1] bg-white p-[0.35rem]">
-                      <Image
-                        // src="/assets/thumbnail_course_1.svg"
-                        src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/http://coursera-university-assets.s3.amazonaws.com/16/ff7d736fe7440b882e9d4c1ccd997c/coursera-wordmark-logo-full-rgb.png?auto=compress&dpr=1&w=72&h=72"
-                        alt="course thumbnails"
-                        loading="lazy"
-                        width={50}
-                        height={50}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
                     <div
                       className="h-[7.5rem] w-full bg-cover bg-center object-cover"
                       style={{
@@ -52,19 +43,28 @@ export default function CourseList({
                       }}></div>
                   </Link>
                   <div className="flex h-full flex-col justify-between px-3.5 pb-[1rem] pt-[3rem]">
-                    <div className="mb-2 h-[4rem] text-primary">
-                      <div className="mb-4">
+                    <div className="mb-2 h-[7.25rem]">
+                      <div className="mb-3">
                         <Link href="#">
                           <h4 className="line-clamp-2 text-xl">{name}</h4>
                         </Link>
                       </div>
-                      <div className="mw-fit text-sm font-medium">
-                        <p>Trạng thái: đang mở</p>
+                      <div className="mb-3 w-fit text-xs text-gray-500">
+                        <span>Thi tự luận</span>
                       </div>
+                      <p className="mb-4 mt-auto w-full text-left text-sm">
+                        Giáo viên: {owner}
+                      </p>
+                      <p className="mb-4 mt-auto w-full text-left text-sm">
+                        Điểm: <span className="font-bold">10</span>
+                      </p>
                     </div>
                     <button
                       onClick={() => {
-                        onClick(_id);
+                        if (setId) {
+                          setId(index);
+                        }
+                        onClick();
                       }}
                       className="w-full self-end rounded bg-[--color-text-link] px-4 py-2 text-center font-medium text-white transition duration-300 hover:scale-105">
                       Xem chi tiết

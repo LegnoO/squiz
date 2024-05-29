@@ -1,6 +1,5 @@
 // Teacher
 type TTeacherID = string;
-type TStudentID = string;
 // Quiz
 type TQuizID = string;
 type TQuizQuestionID = string;
@@ -33,14 +32,12 @@ export interface IQuizQuestionStore {
 export interface IQuizAnswer {
   id?: TQuizAnswerID;
   quiz_exam_id: TQuizExamID;
-  student_id: TStudentID;
   answers: IAnswer[];
-  total_score: number;
 }
 
 export interface IAnswer {
-  quiz_question_id: TQuizQuestionID;
-  question: string;
-  answer_select: string;
-  score: number;
+  question: {
+    _id: TQuizQuestionID;
+  };
+  answer_select: number | null;
 }

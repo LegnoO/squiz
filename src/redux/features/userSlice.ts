@@ -3,7 +3,18 @@ import type { RootState } from "@/redux/store";
 import { IUser } from "@/types/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type UserState = { userInfo: Partial<IUser | null> };
+type UserState = {
+  userInfo: Partial<IUser | null>;
+};
+
+export function clearLocalUserData() {
+  console.log("aydA")
+  localStorage.removeItem("jwt");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("userData")
+  window.location.href = "/signin";
+}
+
 const initialState: UserState = {
   userInfo:
     (typeof window !== "undefined" &&
@@ -20,9 +31,8 @@ export const userSlice = createSlice({
     },
     clearUserData: (state) => {
       state.userInfo = null;
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("refresh_token");
-      localStorage.removeItem("userData");
+      clearLocalUserData();
+  
     },
   },
 });
@@ -30,6 +40,6 @@ export const userSlice = createSlice({
 export const { clearUserData, updateInfoUser } = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selecUser = (state: RootState) => state.user;
+export const selectUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;

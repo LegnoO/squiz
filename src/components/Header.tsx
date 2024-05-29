@@ -129,7 +129,7 @@ const Header = () => {
                           </Link>
                         </div>
                         <div className="w-full text-left hover:bg-gray-100">
-                          <Link href="/settings">
+                          <Link href="/grades">
                             <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
                               <ImTable2 /> Kết quả
                             </button>

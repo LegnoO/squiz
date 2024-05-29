@@ -7,12 +7,14 @@ const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
 // Icons
 import { IoMdArrowBack } from "react-icons/io";
 
-const Header = () => {
+const Header = ({ onClick }: { onClick?: () => void }) => {
   return (
     <div className="relative w-full bg-[--background-primary-main] text-[--color-primary-main] shadow-md">
       <div className="flex items-center justify-between px-4">
         <div className="">
-          <button className="flex items-center gap-2 rounded border border-[--border-primary-main] bg-[--background-primary-main] p-2 transition duration-200 hover:bg-gray-100">
+          <button
+            onClick={onClick}
+            className="flex items-center gap-2 rounded border border-[--border-primary-main] bg-[--background-primary-main] p-2 transition duration-200 hover:bg-gray-100">
             <IoMdArrowBack className="h-6 w-6" />
             <span className="font-medium">Quay lại</span>
           </button>

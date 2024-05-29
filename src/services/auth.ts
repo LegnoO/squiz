@@ -6,7 +6,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type TokenType = { access_token: string; refresh_token: string };
 
-export const getTokenAccess = () => localStorage.getItem("jwt")!;
 
 export const getUserInfo = async (): Promise<{
   data?: IUser | null;
@@ -87,7 +86,6 @@ export async function forgotPassword({ email }: { email: string }): Promise<{
   error?: string;
 }> {
   try {
-    console.log(email);
     const response = await AxiosInstance.post(
       `${API_URL}/auth/forget-password/send-otp`,
       {
@@ -98,7 +96,6 @@ export async function forgotPassword({ email }: { email: string }): Promise<{
     return { message };
   } catch (error) {
     const err = error as AxiosError<any>;
-    console.log(err.response);
     return { error: err.response?.data };
   }
 }
@@ -206,11 +203,7 @@ export async function changePassword({
   error?: string;
 }> {
   try {
-    console.log({
-      password: oldPassword,
-      newPassword,
-      confirmNewPassword: confirmPassword,
-    });
+
     const response = await AxiosInstance.post(
       `${API_URL}/auth/change-password-user/change-password`,
       {

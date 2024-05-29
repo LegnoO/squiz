@@ -1,26 +1,22 @@
 import React from "react";
-import { useCountdown } from "@/hooks/useCountdown";
+import useCountdown from "@/hooks/useCountdown";
+import { getTime } from "@/utils/timeUtils";
 
 interface Props {
   targetDate: number;
 }
 
 const CountdownTimer: React.FC<Props> = ({ targetDate }) => {
-  const { days, hours, minutes, seconds } = useCountdown(targetDate);
+  const { days, hours, minutes, seconds } = getTime(
+    useCountdown(targetDate),
+    "addLeadingZero",
+  );
 
-  const formatTime = (time: number) => {
-    return time > 9 ? time : `0${time}`;
-  };
-
-  if (hours + minutes + seconds <= 0) {
-    return <span>00:00:00</span>;
-  } else {
-    return (
-      <span className="flex flex-col">
-        {formatTime(hours)}:{formatTime(minutes)}:{formatTime(seconds)}
-      </span>
-    );
-  }
+  return (
+    <span className="flex flex-col">
+      {hours}:{minutes}:{seconds}
+    </span>
+  );
 };
 
 export default CountdownTimer;

@@ -38,7 +38,6 @@ const Register = ({}) => {
     });
     setIsLoading(false);
     if (access_token) {
-      console.log(access_token);
       const { data } = await getUserInfo();
 
       if (data) {
