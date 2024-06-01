@@ -12,12 +12,13 @@ import Modal from "./Modal";
 
 // Icon
 import { CiClock2 } from "react-icons/ci";
+import { ICourseList } from "@/types/course";
 
 export default function QuizList({
   courseList,
   onClick,
 }: {
-  courseList: any;
+  courseList: ICourseList[];
   onClick: (id: string) => void;
 }) {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -61,91 +62,95 @@ export default function QuizList({
         <div className="mb-3 px-4 text-left text-2xl font-semibold text-primary md:px-0">
           <h2>Khóa học</h2>
         </div>
-        <div className="grid grid-cols-2 gap-6 px-4 font-medium transition-all md:grid-cols-3 md:px-0 xl:grid-cols-4">
-          {courseList.map((course, index) => {
-            const {
-              title,
-              total_time,
-              max_score,
-              time_begin,
-              time_end,
-              teacher_name,
-              _id,
-            } = course;
+        {courseList.length ? (
+          <div className="grid grid-cols-2 gap-6 px-4 font-medium transition-all md:grid-cols-3 md:px-0 xl:grid-cols-4">
+            {courseList.map((course, index) => {
+              const {
+                title,
+                total_time,
+                max_score,
+                time_begin,
+                time_end,
+                teacher_name,
+                _id,
+              } = course;
 
-            return (
-              <div
-                key={index}
-                className=" rounded border-[0.125rem] border-[border-primary-main] bg-[--background-primary-main] shadow transition duration-300">
-                <div className="flex h-full flex-col text-[0.9375rem] font-semibold text-primary">
-                  <div className="h-full px-3.5 pb-[1rem] pt-4">
-                    <div className="mb-3">
-                      <Link href="#">
-                        <h4 className="line-clamp-2 text-xl">{title}</h4>
-                      </Link>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="mw-fit text-sm font-medium">
-                        <p>
-                          Số lượng câu hỏi:{" "}
-                          <span className="font-bold">60 câu</span>
-                        </p>
+              return (
+                <div
+                  key={index}
+                  className=" rounded border-[0.125rem] border-[border-primary-main] bg-[--background-primary-main] shadow transition duration-300">
+                  <div className="flex h-full flex-col text-[0.9375rem] font-semibold text-primary">
+                    <div className="h-full px-3.5 pb-[1rem] pt-4">
+                      <div className="mb-3">
+                        <Link href="#">
+                          <h4 className="line-clamp-2 text-xl">{title}</h4>
+                        </Link>
                       </div>
-                      <div className="mw-fit font-medium">
-                        <span>
-                          Thời gian làm bài:{" "}
-                          <span className="font-bold">120 Phút</span>
-                        </span>
-                      </div>
-                      <div className="mw-fit text-sm font-medium">
-                        <p>
-                          Thời gian bắt đầu:{" "}
-                          <span className="font-bold">
-                            {new Date(time_begin).getMonth() + 1}
-                            {new Date(time_begin).toString().slice(7, 24)}
+                      <div className="flex flex-col gap-2">
+                        <div className="mw-fit text-sm font-medium">
+                          <p>
+                            Số lượng câu hỏi:{" "}
+                            <span className="font-bold">60 câu</span>
+                          </p>
+                        </div>
+                        <div className="mw-fit font-medium">
+                          <span>
+                            Thời gian làm bài:{" "}
+                            <span className="font-bold">120 Phút</span>
                           </span>
-                        </p>
+                        </div>
+                        <div className="mw-fit text-sm font-medium">
+                          <p>
+                            Thời gian bắt đầu:{" "}
+                            <span className="font-bold">
+                              {new Date(time_begin).getMonth() + 1}
+                              {new Date(time_begin).toString().slice(7, 24)}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="mw-fit text-sm font-medium">
+                          <p>
+                            Thời gian kết thúc:{" "}
+                            <span className="font-bold">
+                              {new Date(time_end).getMonth() + 1}
+                              {new Date(time_end).toString().slice(7, 24)}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="mw-fit text-sm font-medium">
+                          <p>
+                            Trạng thái:{" "}
+                            {new Date(time_end) > new Date() ? (
+                              <span className="font-bold">đang mở</span>
+                            ) : (
+                              <span className="font-bold">đã đóng</span>
+                            )}
+                          </p>
+                        </div>
                       </div>
-                      <div className="mw-fit text-sm font-medium">
-                        <p>
-                          Thời gian kết thúc:{" "}
-                          <span className="font-bold">
-                            {new Date(time_end).getMonth() + 1}
-                            {new Date(time_end).toString().slice(7, 24)}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="mw-fit text-sm font-medium">
-                        <p>
-                          Trạng thái:{" "}
-                          {new Date(time_end) > new Date() ? (
-                            <span className="font-bold">đang mở</span>
-                          ) : (
-                            <span className="font-bold">đã đóng</span>
-                          )}
-                        </p>
-                      </div>
+                      {new Date(time_end) > new Date() ? (
+                        <button
+                          onClick={() => {
+                            setOpenModal(true);
+                            setId(_id);
+                          }}
+                          className="mt-6 w-full self-end rounded bg-[--color-text-link] px-4 py-2 text-center font-medium text-white transition duration-300 hover:scale-105">
+                          Bắt đầu làm bài
+                        </button>
+                      ) : (
+                        <div className="mt-6 w-full self-end rounded bg-gray-500 px-4 py-2 text-center font-medium text-white">
+                          Hêt thời gian
+                        </div>
+                      )}
                     </div>
-                    {new Date(time_end) > new Date() ? (
-                      <button
-                        onClick={() => {
-                          setOpenModal(true);
-                          setId(_id);
-                        }}
-                        className="mt-6 w-full self-end rounded bg-[--color-text-link] px-4 py-2 text-center font-medium text-white transition duration-300 hover:scale-105">
-                        Bắt đầu làm bài
-                      </button>
-                    ) : (
-                      <div className="mt-6 w-full self-end rounded bg-gray-500 px-4 py-2 text-center font-medium text-white">
-                        Hêt thời gian
-                      </div>
-                    )}
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

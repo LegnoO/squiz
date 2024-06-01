@@ -6,16 +6,7 @@ import axios from "axios";
 import { tryCatchAsync } from "@/utils/tryCatchUtil";
 
 export default function SlideShowPage() {
-  async function fetchDataA() {
-    return await axios.get("https://dummyjson.com/todos");
-  }
-
-  (async () => {
-    const [errorA, dataA] = await tryCatchAsync(fetchDataA);
-    console.log({ errorA, dataA });
-  })();
-
-  const [test, setTest] = useState("");
+ 
   // useEffect(() => {
   //   socket.emit("hello world", "hello world");
   //   socket.on("hello world", (msg) => {

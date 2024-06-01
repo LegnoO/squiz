@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@iconify/react": "^4.1.1",
+    "@radix-ui/react-slot": "^1.0.2",
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
@@ -38,6 +39,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/draftjs-to-html": "^0.8.4",
     "@types/html-to-draftjs": "^1.4.3",
     "@types/node": "^20.11.28",
     "@types/react": "^18",

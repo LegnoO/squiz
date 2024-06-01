@@ -1,13 +1,9 @@
 "use client";
-// Hooks
-import { Dispatch, SetStateAction, useState } from "react";
-
 // Next
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 // Types
-import { CourseListType } from "@/types/course";
+import {  ICourseList } from "@/types/course";
 
 // Components
 
@@ -15,9 +11,11 @@ export default function CourseList({
   courseList,
   onClick,
 }: {
-  courseList: any;
+  courseList: ICourseList[];
   onClick: (id: string) => void;
 }) {
+
+
   return (
     <>
       <div className="container py-10">
@@ -57,9 +55,6 @@ export default function CourseList({
                         <Link href="#">
                           <h4 className="line-clamp-2 text-xl">{name}</h4>
                         </Link>
-                      </div>
-                      <div className="mw-fit text-sm font-medium">
-                        <p>Trạng thái: đang mở</p>
                       </div>
                     </div>
                     <button

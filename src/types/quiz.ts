@@ -41,3 +41,22 @@ export interface IAnswer {
   };
   answer_select: number | null;
 }
+
+
+
+export interface IQuizList {
+  _id: string;
+  teacher_id: string;
+  title: string;
+  course_id: string;
+  total_question_hard: number;
+  total_question_middle: number;
+  total_question_easy: number;
+  total_time: number;
+  max_score: number;
+  time_begin: Date;
+  time_end: Date;
+  createAt: Date;
+  status: string;
+}
+

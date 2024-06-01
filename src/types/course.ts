@@ -1,9 +1,11 @@
-export type CourseType = {
+export interface ICourseList {
   _id: string;
-  title: string;
   name: string;
-  owner: string;
-  link: string;
-};
+  category_id: string;
+  icon: string | null;
+  status: string;
+  createAt: string;
+  Quantity: number;
+}
 
-export type CourseListType = CourseType[];
+
