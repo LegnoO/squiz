@@ -14,11 +14,16 @@ import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/quiz";
 import Header from "../../../components/Header";
 import dynamic from "next/dynamic";
 import AxiosInstance from "@/config/axios";
+import { handleAxiosError } from "@/utils/errorHandler";
+import { useRouter } from "next/navigation";
+
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
   ssr: false,
 });
 
 export default function QuizPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [quizAnswerId, setQuizAnswerId] = useState<string>("");
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,24 +31,30 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   const [totalTime, setTotalTime] = useState<number>(0);
   useEffect(() => {
     const getQuizExam = async () => {
-      const res = await AxiosInstance.post(
-        "https://e-learming-be.onrender.com/quiz-exam/get/quiz-exam",
-        {
-          quiz_id: params.id,
-        },
-      );
+      try {
+        const res = await AxiosInstance.post(
+          "https://e-learming-be.onrender.com/quiz-exam/get/quiz-exam",
+          {
+            quiz_id: params.id,
+          },
+        );
 
-      setQuizAnswer((prev) => ({
-        ...prev,
-        quiz_exam_id: res.data.res.quiz_exam_id,
-      }));
+        setQuizAnswerId(res.data.res.quiz_answer_id);
+        setQuizAnswer((prev) => ({
+          ...prev,
+          quiz_exam_id: res.data.res.quiz_exam_id,
+        }));
 
-      setTimeRemaining(Math.floor(Number(res.data.res.time_remaining)));
-      setTotalTime(res.data.res.total_time);
-      if (res.data.res.isFirst) {
-        setQuizQuestion(res.data.res.dataExam);
-      } else {
-        setQuizQuestion(res.data.res.dataExam.map((x: any) => x.question));
+        setTimeRemaining(Math.floor(Number(res.data.res.time_remaining)));
+        setTotalTime(res.data.res.total_time);
+        if (res.data.res.isFirst) {
+          setQuizQuestion(res.data.res.dataExam);
+        } else {
+          setQuizQuestion(res.data.res.dataExam.map((x: any) => x.question));
+        }
+      } catch (error) {
+        router.back();
+        handleAxiosError(error);
       }
     };
 
@@ -111,10 +122,10 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       const updatedList: IAnswer[] = newListAnswer.map((x) =>
         x.question._id === id
           ? {
-              ...x,
-              answer_select:
-                x.answer_select === answer_select ? null : answer_select,
-            }
+            ...x,
+            answer_select:
+              x.answer_select === answer_select ? null : answer_select,
+          }
           : x,
       );
       setQuizAnswer({
@@ -136,6 +147,24 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       }));
     }
   };
+
+
+  async function handleSubmit() {
+    try {
+      const res = await AxiosInstance.post(
+        "https://e-learming-be.onrender.com/quiz-answer/update-final",
+        {
+          id: quizAnswerId,
+        },
+      );
+      console.log(res)
+      router.back()
+    } catch (error) {
+      handleAxiosError(error)
+    }
+  }
+  
+
   return (
     <div className="h-screen bg-[--background-surface-color]">
       <Header />
@@ -301,15 +330,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             </div>
 
             <button
-              onClick={async () => {
-                const res = await AxiosInstance.post(
-                  "https://e-learming-be.onrender.com/quiz-answer/update-final",
-                  {
-                    id: "663862ad00835358849aee99",
-                  },
-                );
-                console.log(res.data);
-              }}
+              onClick={handleSubmit}
               className="mb-3 rounded bg-[--color-text-link] px-3 py-2 font-semibold text-white transition duration-200 hover:scale-110">
               Nộp bài...
             </button>

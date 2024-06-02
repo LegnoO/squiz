@@ -25,7 +25,7 @@ import { IEssayList } from "@/types/essay";
 import QuizExamList from "@/components/QuizExamList";
 import EssayExamList from "@/components/EssayExamList";
 
-export default function QuizPage({ params }: { params: { id: string } }) {
+export default function ListExamPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
   const [essayList, setEssayList] = useState<IEssayList[]>([]);

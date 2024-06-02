@@ -20,7 +20,7 @@ import AxiosInstance from "@/config/axios";
 const QuizExamList = ({ quizList }: { quizList: IQuizList[] }) => {
   const router = useRouter();
   async function enterExam(quizID: string) {
-    router.push(`/list-exam/exam/${quizID}`);
+    router.push(`/list-exam/quiz-exam/${quizID}`);
   }
 
   return (

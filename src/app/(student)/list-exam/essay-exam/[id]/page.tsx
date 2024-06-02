@@ -1,4 +1,7 @@
 "use client";
+// Nextjs
+import { useRouter, useSearchParams } from "next/navigation";
+
 // Hooks
 import { useState, useEffect } from "react";
 
@@ -17,7 +20,7 @@ import { FaRegFileWord } from "react-icons/fa";
 
 // Types
 import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/quiz";
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import dynamic from "next/dynamic";
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
   ssr: false,
@@ -30,6 +33,7 @@ import draftToHtml from "draftjs-to-html";
 // Lib
 import { useDropzone } from "react-dropzone";
 import AxiosInstance from "@/config/axios";
+import { handleAxiosError } from "@/utils/errorHandler";
 
 interface IFileProp {
   name: string;
@@ -39,6 +43,8 @@ interface IFileProp {
 
 // test[test.length - 2].concat(" ",test[test.length - 1].slice(0, test[test.length - 1].lastIndexOf(".")))
 export default function QuizPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [content, setContent] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
@@ -59,6 +65,26 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     />
   ));
 
+  const courseId = searchParams.get("idCourse");
+  console.log("🚀 ~ QuizPage ~ courseId:", courseId);
+
+  useEffect(() => {
+    const getEssayExam = async () => {
+      try {
+        const res = await AxiosInstance.post(
+          `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/${params.id}?idCourse=${courseId}`,
+        );
+        console.log(res);
+        // const idExam = res.data.essay_exam_answer_id;
+      } catch (error) {
+        router.back();
+        handleAxiosError(error);
+      }
+    };
+
+    getEssayExam();
+  }, []);
+
   function handleChangeContent(contentState: EditorState) {
     const rawState = convertToRaw(contentState.getCurrentContent());
     const markup = draftToHtml(rawState);
@@ -72,9 +98,22 @@ export default function QuizPage({ params }: { params: { id: string } }) {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append("id_essay_exam_answer", "id test");
     formData.append("content_answers", content);
     formData.append("file_essay_answer", files[0]);
+    try {
+      const res = AxiosInstance.post(
+        `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${2}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      console.log(res);
+    } catch (error) {
+      handleAxiosError(error);
+    }
   };
   {
     /* <button

@@ -17,17 +17,7 @@ const EssayExamList = ({ essayList }: { essayList: IEssayList[] }) => {
   const router = useRouter();
 
   async function enterExam(essayId: string, courseId: string) {
-    try {
-      const res = await AxiosInstance.post(
-        `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/${essayId}?idCourse=${courseId}`,
-      );
-
-      const idExam = res.data.essay_exam_answer_id;
-      router.push(`/essay/${idExam}`);
-    } catch (error) {
-      // "66599c3b2cec0299e028902e"
-      handleAxiosError(error);
-    }
+    router.push(`/list-exam/essay-exam/${essayId}?idCourse=${courseId}`);
   }
 
   return (
