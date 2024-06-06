@@ -72,6 +72,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -192,12 +193,15 @@ body {
 .quiz-slide {
   & .carousel .control-next:before {
     border-left: 8px solid var(--color-secondary-main) !important;
+
     &:hover {
       border-left: 8px solid var(--color-primary-main) !important;
     }
   }
+
   & .carousel .control-prev:before {
     border-right: 8px solid var(--color-secondary-main) !important;
+
     &:hover {
       border-right: 8px solid var(--color-primary-main) !important;
     }
@@ -207,10 +211,10 @@ body {
     background: unset !important;
   }
 }
+
 .popper-animation {
   transition-duration: 300ms;
-  animation: popper-module--pop-in--UYCRb 100ms cubic-bezier(0.2, 0, 0.38, 0.9)
-    forwards;
+  animation: popper-module--pop-in--UYCRb 100ms cubic-bezier(0.2, 0, 0.38, 0.9) forwards;
 }
 
 @keyframes PopperHover {
@@ -219,6 +223,7 @@ body {
     transform: scale(0.9);
     display: none;
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -237,7 +242,7 @@ body {
     border-bottom-left-radius: 0.25rem;
   }
 
-  .ql-toolbar.ql-snow + .ql-container.ql-snow {
+  .ql-toolbar.ql-snow+.ql-container.ql-snow {
     border: 1px solid #ccc;
   }
 
@@ -256,6 +261,7 @@ body {
       & .quill-checkbox {
         color: #0f7101 !important;
       }
+
       & .button-delete:hover {
         color: red !important;
       }
@@ -277,8 +283,8 @@ svg.iconify {
 }
 
 .Spinner-root {
-  width: var(--spinner-width);
-  height: var(--spinner-height);
+  width: var(--spinner-size, 2rem);
+  height: var(--spinner-size, 2rem);
   border-radius: 50%;
   border: 0.25rem solid transparent;
   border-top-color: var(--spinner-color, hsl(332, 100%, 50%));
@@ -289,6 +295,7 @@ svg.iconify {
   0% {
     transform: rotate(0);
   }
+
   100% {
     transform: rotate(360deg);
   }

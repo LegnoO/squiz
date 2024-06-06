@@ -45,7 +45,7 @@ export default function GameBlockPage({
   const router = useRouter();
 
   const [selectAnswer, setSelectAnswer] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [questionLength, setQuestionLength] = useState<number>(0);
@@ -55,7 +55,9 @@ export default function GameBlockPage({
   });
 
   function handleAnswerSelect(index: number) {
-    setSelectAnswer(index);
+    if (answerCorrect.correctAnswerIndex === null) {
+      setSelectAnswer(index);
+    }
   }
 
   function updateAnswerTrue() {
@@ -125,6 +127,9 @@ export default function GameBlockPage({
     });
 
     socket.on("timeUp", ({ correctAnswerIndex }) => {
+      console.log("timeUp");
+      console.log({ correctAnswerIndex });
+      setSelectAnswer(null);
       setAnswerCorrect({ correctAnswerIndex });
     });
 
@@ -139,7 +144,7 @@ export default function GameBlockPage({
     };
   }, []);
 
-  if (!isLoading) {
+  if (isLoading) {
     return renderLoading();
   }
 
@@ -174,7 +179,7 @@ export default function GameBlockPage({
                     <button
                       key={i}
                       onClick={() => handleAnswerSelect(i)}
-                      className={`flex items-center justify-center rounded-sm hover:opacity-60 ${selectAnswer === i ? "opacity-60" : ""}`}
+                      className={`flex items-center justify-center rounded-sm ${answerCorrect.correctAnswerIndex === null ? "hover:opacity-40 " : ""}${answerCorrect.correctAnswerIndex !== null && answerCorrect.correctAnswerIndex !== i ? "opacity-40 " : ""}${selectAnswer !== null && selectAnswer === i ? "opacity-40 " : ""}`}
                       style={{ backgroundColor }}>
                       <span className="h-[230px] w-[200px] p-4 text-white">
                         {icon}

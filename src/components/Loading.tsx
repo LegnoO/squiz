@@ -5,23 +5,18 @@ import { useEffect, useRef } from "react";
 
 // ** Types
 interface ILoadingProps {
-  width?: string;
-  height?: string;
+  size?: string;
   color?: string;
 }
 
-export default function Loading({
-  width = "2rem",
-  height = "2rem",
-  color = "hsl(332, 100%, 50%)",
-}: ILoadingProps) {
+export default function Loading({ size,  color }: ILoadingProps) {
   const spinnerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (spinnerRef.current) {
-      spinnerRef.current.style.setProperty("--spinner-width", width);
-      spinnerRef.current.style.setProperty("--spinner-height", height);
-      spinnerRef.current.style.setProperty("--spinner-color", color);
+
+      if (size) spinnerRef.current.style.setProperty("--spinner-size", size);
+      if (color) spinnerRef.current.style.setProperty("--spinner-color", color);
     }
   }, []);
 
