@@ -3,6 +3,8 @@
 // Hooks
 import { useEffect, useState } from "react";
 // Components
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import ClickOutsideHandler from "@/components/ClickAwayListenerCustom";
 import Modal from "@/components/Modal";
 import QuizList from "@/components/QuizList";
@@ -35,7 +37,6 @@ export default function ListExamPage({ params }: { params: { id: string } }) {
       const res = await AxiosInstance.get(
         `https://e-learming-be.onrender.com/course/get-exam?course_id=${params.id}`,
       );
-      console.log(res.data.res);
       setQuizList(res.data.res.dataQuizNotExpire);
       setEssayList(res.data.res.dataEssayExamNotExpire);
     };
@@ -51,9 +52,13 @@ export default function ListExamPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <QuizExamList quizList={quizList} />
-      <div className="my-8" />
-      <EssayExamList essayList={essayList} />
+      <Header />
+      <div className="py-12 px-8">
+        <QuizExamList quizList={quizList} />
+        <div className="my-12" />
+        <EssayExamList essayList={essayList} />
+      </div>
+      <Footer />
     </>
   );
 }

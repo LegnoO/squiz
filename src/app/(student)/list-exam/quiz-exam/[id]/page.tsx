@@ -24,6 +24,7 @@ const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
 export default function QuizPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [quizAnswerId, setQuizAnswerId] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,7 +39,8 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             quiz_id: params.id,
           },
         );
-
+        console.log("🚀 ~ getQuizExam ~ res:", res);
+        setTitle(res.data.res.title);
         setQuizAnswerId(res.data.res.quiz_answer_id);
         setQuizAnswer((prev) => ({
           ...prev,
@@ -122,10 +124,10 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       const updatedList: IAnswer[] = newListAnswer.map((x) =>
         x.question._id === id
           ? {
-            ...x,
-            answer_select:
-              x.answer_select === answer_select ? null : answer_select,
-          }
+              ...x,
+              answer_select:
+                x.answer_select === answer_select ? null : answer_select,
+            }
           : x,
       );
       setQuizAnswer({
@@ -148,7 +150,6 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     }
   };
 
-
   async function handleSubmit() {
     try {
       const res = await AxiosInstance.post(
@@ -157,13 +158,12 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           id: quizAnswerId,
         },
       );
-      console.log(res)
-      router.back()
+      console.log(res);
+      router.back();
     } catch (error) {
-      handleAxiosError(error)
+      handleAxiosError(error);
     }
   }
-  
 
   return (
     <div className="h-screen bg-[--background-surface-color]">
@@ -171,7 +171,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       <div className="h-full w-full pt-[2rem]">
         <div className="flex justify-center gap-4 pr-[1.5rem] md:pl-[2.5rem]">
           <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
-            <div className="mb-3 text-lg font-semibold">Môn: Toán cao cấp</div>
+            <div className="mb-3 text-lg font-semibold">Môn: {title}</div>
 
             <div className="mb-3 bg-[--background-primary-main] font-semibold text-primary">
               Chế độ: <span className="font-bold">Thi trắc nghiệm</span>

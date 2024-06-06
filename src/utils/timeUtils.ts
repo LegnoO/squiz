@@ -3,8 +3,12 @@ export const formatTime = (time: number): string => {
 };
 
 export function getTime(timeDifference: number, format?: "addLeadingZero") {
+  console.log("🚀 ~ getTime ~ timeDifference:", timeDifference);
+
   if (timeDifference < 0) {
-    throw new Error('Invalid time difference. Time difference must be non-negative.');
+    throw new Error(
+      "Invalid time difference. Time difference must be non-negative.",
+    );
   }
 
   const millisecondsInDay = 1000 * 60 * 60 * 24;
@@ -31,8 +35,9 @@ export function getTime(timeDifference: number, format?: "addLeadingZero") {
     days: days.toString(),
     hours: format ? formattedHours : hours.toString(),
     minutes: format ? formattedMinutes : minutes.toString(),
-    seconds: format ? formattedSeconds : seconds.toString()
+    seconds: format ? formattedSeconds : seconds.toString(),
   };
+
 
   return result;
 }

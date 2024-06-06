@@ -55,6 +55,10 @@ const QuizExamList = ({ quizList }: { quizList: IQuizList[] }) => {
                       {new Date(quiz.time_end).toLocaleString()}
                     </span>
                   </div>
+                  <div>
+                    <strong>Hình thức thi:</strong>{" "}
+                    <span className="font-medium">Trắc nghiệm</span>
+                  </div>
                 </div>
               </CardContent>
               <CardFooter>
