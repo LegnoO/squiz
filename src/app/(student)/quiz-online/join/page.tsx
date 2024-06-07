@@ -16,8 +16,11 @@ export default function JoinPage() {
   const inputNameRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const userData = JSON.parse(localStorage.getItem("userDatas")!) || "";
-  const userEmail = userData.email;
+  const userData =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("userDatas")!)
+      : "";
+  const userEmail = userData ? userData.email : null;
   const [userName, setUserName] = useState<string>(
     userEmail ? userEmail.split("@")[0] : "",
   );
@@ -45,7 +48,6 @@ export default function JoinPage() {
     window.history.pushState({ userName }, "", null);
     router.push(`instructions/${roomId}`);
   }
-
 
   useEffect(() => {
     socket.connect();

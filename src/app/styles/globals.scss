@@ -282,13 +282,20 @@ svg.iconify {
   width: 100%;
 }
 
-.Spinner-root {
-  width: var(--spinner-size, 2rem);
-  height: var(--spinner-size, 2rem);
+.SpinnerRoot {
+  --spinner-size: 2rem;
+  --spinner-color: hsl(332, 100%, 50%);
+  --spinner-timer: 1s;
+
   border-radius: 50%;
   border: 0.25rem solid transparent;
-  border-top-color: var(--spinner-color, hsl(332, 100%, 50%));
-  animation: spin 1s linear infinite;
+
+  &.SpinnerBase {
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    border-top-color: var(--spinner-color);
+    animation: spin var(--spinner-timer) linear infinite;
+  }
 }
 
 @keyframes spin {

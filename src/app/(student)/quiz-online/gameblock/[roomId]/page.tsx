@@ -39,11 +39,7 @@ export default function GameBlockPage({
 }: {
   params: { roomId: string };
 }) {
-  // window.history.pushState({ test2: "test" }, "", null);
-  // console.log(window.history.state);
-
   const router = useRouter();
-
   const [selectAnswer, setSelectAnswer] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [countdown, setCountdown] = useState<number | null>(null);
@@ -55,16 +51,19 @@ export default function GameBlockPage({
   });
 
   function handleAnswerSelect(index: number) {
-    if (answerCorrect.correctAnswerIndex === null) {
-      setSelectAnswer(index);
-    }
-  }
-
-  function updateAnswerTrue() {
-    socket.emit("answer", {
+    console.log({
       roomId: params.roomId,
-      answerIndex: currentQuestionIndex,
-    });
+      answerIndex: index,
+    })
+    if (answerCorrect.correctAnswerIndex === null && selectAnswer === null) {
+      setSelectAnswer(index);
+
+      socket.emit("answer", {
+        roomId: params.roomId,
+        answerIndex: index,
+      });
+
+    }
   }
 
   function getButtonStyle(
@@ -127,21 +126,30 @@ export default function GameBlockPage({
     });
 
     socket.on("timeUp", ({ correctAnswerIndex }) => {
-      console.log("timeUp");
-      console.log({ correctAnswerIndex });
       setSelectAnswer(null);
       setAnswerCorrect({ correctAnswerIndex });
     });
 
-    socket.on("newQuestion", ({ questions, timeLeft }) => {
+    socket.on("newQuestion", () => {
       setAnswerCorrect({ correctAnswerIndex: null });
       setCurrentQuestionIndex((prev) => prev + 1);
     });
 
+    socket.on("quizEnd", ({ personalScore, top5 }) => {
+      window.history.pushState({ personalScore }, "", null);
+      router.push("/quiz-online/result");
+    });
+
     // Error
     return () => {
-      socket.off("");
+      socket.off("newQuestion");
+      socket.off("quizStarted");
+      socket.off("countdown");
+      socket.off("timeUp");
+      socket.off("quizEnd");
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {

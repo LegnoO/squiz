@@ -20,5 +20,5 @@ export default function Loading({ size,  color }: ILoadingProps) {
     }
   }, []);
 
-  return <div ref={spinnerRef} className="Spinner-root" />;
+  return <div ref={spinnerRef} className="SpinnerRoot SpinnerBase" />;
 }
