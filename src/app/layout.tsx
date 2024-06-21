@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import AuthGuard from "@/components/AuthGuard";
-
-import { Suspense } from "react";
-import Provider from "@/redux/StoreProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@/app/styles/globals.scss";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { AuthProvider } from "@/context/AuthContext";
+import AuthGuard from "@/components/AuthGuard";
+import "nprogress/nprogress.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,14 +20,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider>
-        <AuthGuard>
-          <body>
-            {children}
-            <ToastContainer />
-          </body>
-        </AuthGuard>
-      </Provider>
+      <body>
+          <AuthProvider>
+            <AuthGuard>
+              <>
+                {children}
+                <ToastContainer />
+              </>
+            </AuthGuard>
+          </AuthProvider>
+      </body>
+
     </html>
   );
 }

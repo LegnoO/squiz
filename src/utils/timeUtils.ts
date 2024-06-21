@@ -3,8 +3,6 @@ export const formatTime = (time: number): string => {
 };
 
 export function getTime(timeDifference: number, format?: "addLeadingZero") {
-  console.log("🚀 ~ getTime ~ timeDifference:", timeDifference);
-
   if (timeDifference < 0) {
     throw new Error(
       "Invalid time difference. Time difference must be non-negative.",

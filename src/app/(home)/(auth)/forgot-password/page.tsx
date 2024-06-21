@@ -213,7 +213,7 @@ const ForgotPassword = ({}) => {
 
           <div className="mb-3 mt-5">
             <Button onClick={handleSubmit} isLoading={isLoading}>
-              Tiếp theo
+            Gửi yêu cầu
             </Button>
           </div>
         </div>

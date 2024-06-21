@@ -82,22 +82,18 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const getEssayExam = async () => {
       try {
-        const res = await AxiosInstance.post(
-          `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/${params.id}?idCourse=${courseId}`,
-        );
-        console.log(res);
-
-        if (res.data) {
-          setTimeLeft(Math.floor(res.data.total_time_left));
-          setEssayExam(res.data.data_test);
-
-          if (!res.data.isFirst) {
-            setIdAnswer(res.data.essay_exam_answer_id);
-          } else {
-            setIdAnswer(res.data.data_answer._id);
-          }
+        const data = {
+          idEssayExam: params.id,
+          idCourse: courseId
         }
-        // const idExam = res.data.essay_exam_answer_id;
+
+        const res = await AxiosInstance.post(
+          `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/`,
+          data)
+        setTimeLeft(Math.floor(res.data.total_time_left));
+        setEssayExam(res.data.data_test);
+        setIdAnswer(res.data.essay_exam_answer_id);
+
       } catch (error) {
         router.back();
         handleAxiosError(error);
@@ -105,6 +101,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     };
 
     getEssayExam();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleChangeContent(contentState: EditorState) {
@@ -115,26 +112,24 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     setEditorState(contentState);
   }
 
-  useEffect(() => {}, [files]);
+  useEffect(() => { }, [files]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     const formData = new FormData();
     formData.append("content_answers", content);
     formData.append("file_essay_answer", files[0]);
     try {
-      console.log(content);
-      console.log(files[0]);
-      // const res = AxiosInstance.post(
-      //   `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${idAnswer}`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   },
-      // );
-      // console.log(res);
+      const res = await AxiosInstance.post(
+        `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${idAnswer}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      router.back();
     } catch (error) {
       handleAxiosError(error);
     }

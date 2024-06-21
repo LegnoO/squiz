@@ -1,43 +1,43 @@
 "use client";
-// Hooks
-import { useRouter } from "next/navigation";
-import { clearUserData } from "@/redux/features/userSlice";
-import { useDispatch } from "react-redux";
+
+// ** React Imports
 import { useEffect, useState } from "react";
+
+
+// ** Hooks
 import { useMediaQuery } from "react-responsive";
-import { useAppSelector } from "@/redux/hooks";
-import useRouteChange from "./RouteChangeListener";
-// Components
+
+// ** Next Imports
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
+// ** Components
 import Sidebar from "./Sidebar";
 import Popper from "@/components/Popper";
-// Icons
+
+// ** Icons
 import { MdLogin } from "react-icons/md";
-import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
 import { ImTable2 } from "react-icons/im";
-import { IoIosArrowDown } from "react-icons/io";
-import { BsPlus } from "react-icons/bs";
+import { IoIosArrowDown, IoIosMenu } from "react-icons/io";
 import { FaGraduationCap } from "react-icons/fa6";
-import { GrNotification } from "react-icons/gr";
-import { IoIosMenu } from "react-icons/io";
 import { TfiSearch } from "react-icons/tfi";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const [isMounted, setIsMounted] = useState(false);
 
-  const user = useAppSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
+  const { user } = useAuth();
   const [mobileNav, setMobileNav] = useState<boolean>(false);
   const isMobileScreen = useMediaQuery({ query: "(max-width: 800px)" });
   const router = useRouter();
 
   const handleLogout = () => {
-    dispatch(clearUserData());
     router.replace("/signin");
   };
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -184,8 +184,6 @@ const Header = () => {
         <Sidebar isOpen={mobileNav} toggleSidebar={setMobileNav} />
       </>
     );
-  } else {
-    return <div className="h-[3.5rem] w-full animate-pulse bg-gray-500"></div>;
   }
 };
 

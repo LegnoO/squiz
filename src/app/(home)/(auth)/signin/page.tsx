@@ -1,24 +1,20 @@
 "use client";
 
-// Hook
+// ** Hooks
 import { useState, useRef } from "react";
-import { useAppDispatch } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// Icons
-
-// Components
+// ** Components
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 
-// Utils
+// ** Utils
 import { isEmptyString } from "@/utils/stringEmpty";
 
-// Services
-import { loginUser, getUserInfo } from "@/services/auth";
-import { updateInfoUser } from "@/redux/features/userSlice";
+// ** Services
+
 import { playToast } from "@/utils/ToastMessage";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = ({}) => {
   const emailFieldRef = useRef<HTMLInputElement>(null);
@@ -27,28 +23,11 @@ const Login = ({}) => {
   const [password, setPassword] = useState<string>("admin");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async () => {
-    setIsLoading(true);
-    const { access_token, error: err } = await loginUser({ email, password });
-
-    if (err) {
-      setError(err);
-    }
-
-    if (access_token) {
-      const { data } = await getUserInfo();
-
-      setError("");
-      if (data) {
-        dispatch(updateInfoUser(data));
-        playToast("success", "Đăng nhập thành công");
-        router.push("/");
-      }
-    }
-    setIsLoading(false);
+    await login(email, password);
+    playToast("success", "Đăng nhập thành công");
   };
 
   return (
@@ -125,7 +104,7 @@ const Login = ({}) => {
             </p>
           </div>
 
-          <div className="text-primary mt-6 border-t border-t-[--border-primary-main] pt-3 text-center text-sm leading-6">
+          <div className="mt-6 border-t border-t-[--border-primary-main] pt-3 text-center text-sm leading-6 text-primary">
             <p>
               Bạn không có tài khoản?{" "}
               <span className="link-underline font-bold text-[#5624d0]">

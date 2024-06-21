@@ -7,50 +7,37 @@ import {
   useSearchParams,
   useRouter,
 } from "next/navigation";
-import { getTokenAccess } from "../services/auth";
-import { getUserInfo } from "@/services/auth";
-import { useAppDispatch } from "@/redux/hooks";
-import { updateInfoUser } from "@/redux/features/userSlice";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const dispatch = useAppDispatch();
+  const { loading } = useAuth();
   const guestRoutes = ["/signin", "/signup", "/forgot-password"];
-  const protectedRoutes = ["/quiz", "/settings"];
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
   const pathname = usePathname();
   const router = useRouter();
 
-  
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("jwt")!;
-    const initAuth = async () => {
-      if (isAuthenticated) {
-        const { data } = await getUserInfo();
+    const token =
+      typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("userData")!)
+        : "";
 
-        if (data) {
-          dispatch(updateInfoUser(data));
-        }
+    if (!token) {
+      // if user is logined
+      if (!guestRoutes.includes(pathname)) {
+        router.replace("/signin");
+      } 
+    } else {
+      if (guestRoutes.includes(pathname)) {
+        router.replace("/");
       }
-    };
-    initAuth();
-  }, []);
-
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem("jwt")!;
-    const user = JSON.parse(localStorage.getItem("userData")!);
-
-    // if user is logined
-    if (user && isAuthenticated && guestRoutes.includes(pathname)) {
-      redirect("/");
-    }
-    // if user is not logined
-    if (!user && !isAuthenticated && protectedRoutes.includes(pathname)) {
-      redirect("/signin");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  if (loading) {
+    return <>loading...</>;
+  }
 
   return <>{children}</>;
 }

@@ -29,7 +29,7 @@ const QuizExamList = ({ quizList }: { quizList: IQuizList[] }) => {
         Danh sách đề thi trắc nghiệm
       </div>
       {quizList.length > 0 ? (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           {quizList.map((quiz) => (
             <Card key={quiz._id}>
               <CardHeader>

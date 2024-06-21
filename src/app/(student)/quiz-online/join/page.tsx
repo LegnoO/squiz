@@ -14,28 +14,25 @@ export default function JoinPage() {
   const router = useRouter();
   const inputPinRef = useRef<HTMLInputElement>(null);
   const inputNameRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const userData =
     typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("userDatas")!)
+      ? JSON.parse(localStorage.getItem("userData")!)
       : "";
   const userEmail = userData ? userData.email : null;
   const [userName, setUserName] = useState<string>(
     userEmail ? userEmail.split("@")[0] : "",
   );
-  const [roomId, setRoomId] = useState<string>("");
 
-  function joinRoom() {
+
+  function joinRoom(event: MouseEvent<HTMLElement>) {
+    event.preventDefault();
     socket.emit("joinRoom", {
-      roomId,
+      roomId: inputPinRef?.current?.value,
       userName,
     });
-  }
-
-  function handleSetRoom(event: MouseEvent<HTMLElement>) {
-    event.preventDefault();
-    setRoomId(inputPinRef?.current?.value as string);
   }
 
   function handleSetName(event: MouseEvent<HTMLElement>) {
@@ -46,19 +43,33 @@ export default function JoinPage() {
   function handleSubmit() {
     setIsLoading(true);
     window.history.pushState({ userName }, "", null);
-    router.push(`instructions/${roomId}`);
+    router.push(`instructions/${inputPinRef?.current?.value}`);
   }
 
   useEffect(() => {
     socket.connect();
-  }, []);
 
-  useEffect(() => {
-    if (userName && roomId) {
-      joinRoom();
+    socket.on("joinRoomError", (error) => {
+      console.log("test");
+      setError(error);
+    });
+
+    socket.on("joinedRoom", () => {
+      setError("");
       handleSubmit();
-    }
-  }, [userName, roomId]);
+    });
+
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ""; // Setting this property is necessary for some browsers
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="h-full w-full">
@@ -66,25 +77,26 @@ export default function JoinPage() {
         <main className="max-w-[320px] text-center">
           <h2 className="mb-4 text-3xl font-bold">Squiz</h2>
           <form
-            className={`rounded ${isLoading ? "bg-transparent" : "bg-white"} p-4 shadow`}>
+            className={`flex w-[300px] flex-col gap-2.5 items-center justify-center rounded ${isLoading ? "bg-transparent" : "bg-white"} p-4 shadow`}>
             {isLoading && <Loading />}
-            {!roomId && (
+            {!inputPinRef?.current?.value && (
               <>
                 <input
                   ref={inputPinRef}
-                  className="mb-2.5 h-[44px] w-full rounded border border-slate-300 px-1.5 py-1 text-center font-bold text-black outline-none"
+                  className="h-[44px] w-full rounded border border-slate-300 px-1.5 py-1 text-center font-bold text-black outline-none"
                   placeholder="Game PIN"
                   autoComplete="false"
                 />
                 <button
-                  onClick={handleSetRoom}
+                  onClick={joinRoom}
                   className="h-[44px] w-full rounded bg-gray-700 px-4 font-bold text-white">
                   Enter
                 </button>
+                {error && <span className="font-bold text-[red]">{error}</span>}
               </>
             )}
 
-            {roomId && !userName && (
+            {inputPinRef?.current?.value && !userName && (
               <>
                 <input
                   ref={inputNameRef}

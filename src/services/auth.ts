@@ -7,21 +7,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 type TokenType = { access_token: string; refresh_token: string };
 
 
-export const getUserInfo = async (): Promise<{
-  data?: IUser | null;
-  message?: string;
-  error?: string;
-}> => {
-  try {
-    const response = await AxiosInstance.post(`${API_URL}/user/get-data`);
-    const data: IUser = response.data;
-    const message: string = response.data;
-    localStorage.setItem("userData", JSON.stringify(data));
-    return { data, message };
-  } catch (error) {
-    const err = error as AxiosError<any>;
-    return { error: err.response?.data };
-  }
+export const getUserInfo = async (): Promise<IUser> => {
+  const response = await AxiosInstance.post(`${API_URL}/user/get-data`);
+  const data: IUser = response.data;
+  localStorage.setItem("userData", JSON.stringify(data));
+  return data;
 };
 
 export async function loginUser({
@@ -30,11 +20,8 @@ export async function loginUser({
 }: {
   email: string;
   password: string;
-}): Promise<{
-  access_token?: string;
-  error?: string;
-}> {
-  try {
+}): Promise<string> {
+
     const response = await AxiosInstance.post(`${API_URL}/auth/user/signin`, {
       email,
       password,
@@ -46,11 +33,8 @@ export async function loginUser({
     localStorage.setItem("jwt", access_token);
     localStorage.setItem("refresh_token", refresh_token);
 
-    return { access_token };
-  } catch (error) {
-    const err = error as AxiosError<any>;
-    return { error: err.response?.data.message };
-  }
+    return access_token 
+
 }
 
 export async function registerUser({

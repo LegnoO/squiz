@@ -2,18 +2,17 @@
 
 // Hooks
 import { useEffect, useState } from "react";
+
 // Components
-import ClickOutsideHandler from "@/components/ClickAwayListenerCustom";
-import Modal from "@/components/Modal";
 import CourseList from "@/components/CourseList";
+
 // Fake Data
-import { CourseListData } from "@/FakeData/CourseList";
-import { redirect, useRouter } from "next/navigation";
 import AxiosInstance from "@/config/axios";
 import { ICourseList } from "@/types/course";
+import { useRouterPush } from "@/hooks/useRouterPush";
 
 export default function Home() {
-  const router = useRouter();
+  const pushRoute = useRouterPush();
   const [courseList, setCourseList] = useState<ICourseList[]>([]);
 
 
@@ -29,7 +28,7 @@ export default function Home() {
 
   const handleEnterQuizPage = (id: string) => {
     if (id) {
-      router.push(`/list-exam/${id}`);
+      pushRoute(`/list-exam/${id}`);
     }
   };
 

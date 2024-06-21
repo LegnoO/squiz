@@ -17,8 +17,15 @@ export default function InstructionsPage({
 }: {
   params: { roomId: string };
 }) {
-  
+
   const router = useRouter();
+  const userData =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("userData")!)
+      : "";
+  const userEmail = userData ? userData.email : null;
+  const userName =  userEmail ? userEmail.split("@")[0] : ""
+
   useEffect(() => {
     socket.on("countdown", (countdown) => {
       if (countdown) {
@@ -35,9 +42,9 @@ export default function InstructionsPage({
           <main className="max-w-[320px] text-center">
             <div className="grid place-items-center gap-4">
               <div className="justify-content flex h-[50px] w-[50px] items-center rounded-full bg-gray-200">
-                <p className="w-full text-2xl">{processName("test")}</p>
+                <p className="w-full text-2xl">{processName(userName)}</p>
               </div>
-              <div className="text-2xl font-bold">test</div>
+              <div className="text-2xl font-bold">{userName}</div>
             </div>
             <div className="mt-3 text-base font-bold">
               You are in! See your nickname on screen?

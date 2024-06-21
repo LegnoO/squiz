@@ -26,14 +26,14 @@ const EssayExamList = ({ essayList }: { essayList: IEssayList[] }) => {
         Danh sách đề thi tự luận
       </div>
       {essayList.length > 0 ? (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           {essayList.map((essay) => (
             <Card key={essay._id}>
               <CardHeader>
                 <CardTitle>{essay.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-2">
+                <div className="min-h-[144px] grid gap-2">
                   <div>
                     <strong>Total Time:</strong>{" "}
                     <span className="font-medium">

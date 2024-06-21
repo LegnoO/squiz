@@ -28,11 +28,6 @@ const CountdownTimer: React.FC<Props> = ({ targetDate }) => {
       "addLeadingZero",
     );
 
-    
-    console.log({targetDate });
-    console.log({timeCountDown });
-  
-    console.log({ days, hours, minutes, seconds });
     setTime({ days, hours, minutes, seconds });
   }, [timeCountDown]);
 

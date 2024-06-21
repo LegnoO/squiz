@@ -1,4 +1,4 @@
-import { clearLocalUserData } from "@/redux/features/userSlice";
+import { useAuth } from "@/context/AuthContext";
 import axios, { AxiosError } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -25,7 +25,9 @@ const refreshToken = async (): Promise<string> => {
     localStorage.setItem("jwt", newAccessToken);
     return newAccessToken;
   } catch (error) {
-    clearLocalUserData()
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("refresh_token");
+    window.location.href = "/signin"; 
     throw error;
   }
 };
@@ -45,7 +47,6 @@ AxiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    console.log("error");
     if (
       error.response?.status === 401 &&
       error.config &&
@@ -53,7 +54,6 @@ AxiosInstance.interceptors.response.use(
       !error.response?.config?.url?.includes("/auth/user/refresh")
     ) {
       try {
-        console.log("try");
         const newAccessToken = await refreshToken();
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
 

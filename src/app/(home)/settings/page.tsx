@@ -1,17 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { useAppSelector } from "@/redux/hooks";
-import { useDispatch } from "react-redux";
 import { changePassword, updateUserProfile } from "@/services/auth";
-import { updateInfoUser } from "@/redux/features/userSlice";
 import { playToast } from "@/utils/ToastMessage";
 import useMount from "@/components/useMount";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SettingPage() {
   const isMounted = useMount(false);
 
-  const dispatch = useDispatch();
   const [tab, setTab] = useState<number>(0);
   const [messageStatus, setMessageStatus] = useState<{}>({
     message: null,
@@ -24,7 +21,7 @@ export default function SettingPage() {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const user = useAppSelector((state) => state.user.userInfo);
+  const {user} = useAuth()
 
   const handleUpdateProfile = async () => {
     // const { data } = await updateUserProfile({
