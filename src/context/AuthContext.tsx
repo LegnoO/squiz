@@ -56,7 +56,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       typeof window !== "undefined"
         ? localStorage.getItem("jwt")!
         : "";
-        
+
     const initAuth = async () => {
       if (token) {
         try {
@@ -93,11 +93,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  // const logout = () => {
-  //     localStorage.removeItem('jwt');
-  //     setUser(null);
-  //     pushRoute('/signin');
-  // };
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("refresh_token");
+    setUser(null);
+    pushRoute('/signin');
+  };
 
   const values = {
     user,
@@ -105,7 +107,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     // setUser,
     // setLoading,
     login: handleLogin,
-    // logout: handleLogout
+    logout: handleLogout
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

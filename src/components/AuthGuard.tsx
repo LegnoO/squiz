@@ -16,20 +16,24 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const token =
+    const userData =
       typeof window !== "undefined"
-        ? JSON.parse(localStorage.getItem("userData")!)
+        ? localStorage.getItem("userData")!
         : "";
 
-    if (!token) {
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("jwt")!
+        : "";
+
+    if (!userData && !token && !guestRoutes.includes(pathname)) {
       // if user is logined
-      if (!guestRoutes.includes(pathname)) {
-        router.replace("/signin");
-      } 
-    } else {
-      if (guestRoutes.includes(pathname)) {
-        router.replace("/");
-      }
+      router.replace("/signin");
+    }
+
+    if (userData && token && guestRoutes.includes(pathname)) {
+      // if user not login
+      router.replace("/");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

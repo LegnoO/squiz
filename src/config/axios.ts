@@ -26,8 +26,8 @@ const refreshToken = async (): Promise<string> => {
     return newAccessToken;
   } catch (error) {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("userData");
     localStorage.removeItem("refresh_token");
-    window.location.href = "/signin"; 
     throw error;
   }
 };

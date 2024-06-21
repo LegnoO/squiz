@@ -3,7 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from "react";
 
-
 // ** Hooks
 import { useMediaQuery } from "react-responsive";
 
@@ -29,13 +28,12 @@ import { useAuth } from "@/context/AuthContext";
 const Header = () => {
   const [isMounted, setIsMounted] = useState(false);
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [mobileNav, setMobileNav] = useState<boolean>(false);
   const isMobileScreen = useMediaQuery({ query: "(max-width: 800px)" });
-  const router = useRouter();
 
   const handleLogout = () => {
-    router.replace("/signin");
+    logout();
   };
 
   useEffect(() => {
@@ -55,9 +53,13 @@ const Header = () => {
           <div className="flex w-full items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-primary">
               <div className="my-auto ml-4 mr-2">
-                <Link href="/">
+                {user ? (
+                  <Link href="/">
+                    <h1 className="text-lg font-semibold xl:text-2xl">SQUIZ</h1>
+                  </Link>
+                ) : (
                   <h1 className="text-lg font-semibold xl:text-2xl">SQUIZ</h1>
-                </Link>
+                )}
               </div>
             </div>
 
@@ -95,66 +97,74 @@ const Header = () => {
                       loading="lazy"
                     />
                   )}
-                  <IoIosArrowDown className="h-[1.15rem] w-[1.15rem]" />
+                  {user ? (
+                    <IoIosArrowDown className="h-[1.15rem] w-[1.15rem]" />
+                  ) : (
+                    <></>
+                  )}
                 </div>
-                <Popper width="min-w-[12rem]">
-                  <div className="cursor-default">
-                    <div className="flex w-[95%] items-center gap-3 px-4 py-3">
-                      <Image
-                        src={`${user ? "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625" : "/assets/avatar-default.svg"}`}
-                        className="rounded-full"
-                        width={55}
-                        height={55}
-                        alt="Picture of the author"
-                        loading="lazy"
-                      />
-                      <div>
-                        <p className="text font-bold">
-                          <span>
-                            {user?.username || user?.email || "Guest"}
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-700">
-                          <span>Welcome back</span>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="border-break leading-[1rem]">
-                      <div className="flex flex-col items-center text-sm font-medium text-gray-600">
-                        <div className="w-full text-left hover:bg-gray-100">
-                          <Link href="/settings">
-                            <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
-                              <FaUser /> Hồ sơ
-                            </button>
-                          </Link>
-                        </div>
-                        <div className="w-full text-left hover:bg-gray-100">
-                          <Link href="/grades">
-                            <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
-                              <ImTable2 /> Kết quả
-                            </button>
-                          </Link>
+                {user ? (
+                  <Popper width="min-w-[12rem]">
+                    <div className="cursor-default">
+                      <div className="flex w-[95%] items-center gap-3 px-4 py-3">
+                        <Image
+                          src={`${user ? "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625" : "/assets/avatar-default.svg"}`}
+                          className="rounded-full"
+                          width={55}
+                          height={55}
+                          alt="Picture of the author"
+                          loading="lazy"
+                        />
+                        <div>
+                          <p className="text font-bold">
+                            <span>
+                              {user?.username || user?.email || "Guest"}
+                            </span>
+                          </p>
+                          <p className="text-xs text-gray-700">
+                            <span>Welcome back</span>
+                          </p>
                         </div>
                       </div>
+                      <div className="border-break leading-[1rem]">
+                        <div className="flex flex-col items-center text-sm font-medium text-gray-600">
+                          <div className="w-full text-left hover:bg-gray-100">
+                            <Link href="/settings">
+                              <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
+                                <FaUser /> Hồ sơ
+                              </button>
+                            </Link>
+                          </div>
+                          <div className="w-full text-left hover:bg-gray-100">
+                            <Link href="/grades">
+                              <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
+                                <ImTable2 /> Kết quả
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
 
-                      <div className="border-break w-full text-left text-sm font-medium hover:bg-gray-100">
-                        {user ? (
-                          <button
-                            onClick={handleLogout}
-                            className="flex w-full items-center gap-2 px-4 py-3 text-left">
-                            <RiLogoutBoxLine /> Đăng xuất
-                          </button>
-                        ) : (
-                          <Link href="/signin">
-                            <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
-                              <MdLogin /> Đăng nhập
+                        <div className="border-break w-full text-left text-sm font-medium hover:bg-gray-100">
+                          {user ? (
+                            <button
+                              onClick={handleLogout}
+                              className="flex w-full items-center gap-2 px-4 py-3 text-left">
+                              <RiLogoutBoxLine /> Đăng xuất
                             </button>
-                          </Link>
-                        )}
+                          ) : (
+                            <Link href="/signin">
+                              <button className="flex w-full items-center gap-2 px-4 py-3 text-left">
+                                <MdLogin /> Đăng nhập
+                              </button>
+                            </Link>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Popper>
+                  </Popper>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
