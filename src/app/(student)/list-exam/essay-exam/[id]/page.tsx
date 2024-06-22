@@ -19,7 +19,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { FaRegFileWord } from "react-icons/fa";
 
 // Types
-import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/quiz";
+import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/Quiz";
 import Header from "../../../components/Header";
 import dynamic from "next/dynamic";
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
@@ -84,16 +84,16 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       try {
         const data = {
           idEssayExam: params.id,
-          idCourse: courseId
-        }
+          idCourse: courseId,
+        };
 
         const res = await AxiosInstance.post(
           `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/`,
-          data)
+          data,
+        );
         setTimeLeft(Math.floor(res.data.total_time_left));
         setEssayExam(res.data.data_test);
         setIdAnswer(res.data.essay_exam_answer_id);
-
       } catch (error) {
         router.back();
         handleAxiosError(error);
@@ -112,7 +112,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     setEditorState(contentState);
   }
 
-  useEffect(() => { }, [files]);
+  useEffect(() => {}, [files]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleSubmit() {
@@ -133,7 +133,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     } catch (error) {
       handleAxiosError(error);
     }
-  };
+  }
   {
     /* <button
                 onClick={() => {

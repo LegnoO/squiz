@@ -13,13 +13,11 @@ import CourseList from "@/components/CourseList";
 import AxiosInstance from "@/config/axios";
 
 // ** Types
-import { ICourseList } from "@/types/course";
-
+import { ICourseList } from "@/types/Course";
 
 export default function Home() {
   const router = useRouter();
   const [courseList, setCourseList] = useState<ICourseList[]>([]);
-
 
   useEffect(() => {
     const getCourse = async () => {

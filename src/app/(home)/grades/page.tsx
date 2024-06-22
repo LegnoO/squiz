@@ -1,6 +1,5 @@
 "use client";
 
-import { CourseListData } from "@/FakeData/CourseList";
 // Hooks
 import { useState } from "react";
 // Components

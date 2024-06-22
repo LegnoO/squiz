@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 // Types
-import { ICourseList } from "@/types/course";
+import { ICourseList } from "@/types/Course";
 
 // Components
 
@@ -14,15 +14,13 @@ export default function CourseList({
   courseList: ICourseList[];
   onClick: (id: string) => void;
 }) {
-
-
   return (
     <>
       <div className="container py-10">
         <div className="mb-3 px-4 text-left text-2xl font-semibold text-primary md:px-0">
           <h2>Khóa học</h2>
         </div>
-        <div className="grid grid-cols-2 gap-8 px-4 font-medium transition-all md:grid-cols-3 md:px-0 xl:grid-cols-4">
+        <div className="xxl:grid-cols-5 grid grid-cols-1 gap-8 px-4 font-medium transition-all sm:grid-cols-2 md:grid-cols-3 md:px-0 xl:grid-cols-4">
           {courseList.map((course, index) => {
             const { name, _id } = course;
             return (

@@ -21,7 +21,7 @@ export default function SettingPage() {
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const {user} = useAuth()
+  const { user } = useAuth();
 
   const handleUpdateProfile = async () => {
     // const { data } = await updateUserProfile({
@@ -66,7 +66,7 @@ export default function SettingPage() {
             <div className="flex items-center justify-center">
               {isMounted ? (
                 <Image
-                  src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625"
+                  src="/images/avatar-default.png"
                   className="mb-2 rounded-full"
                   width={100}
                   height={100}

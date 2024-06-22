@@ -57,7 +57,9 @@ const Header = () => {
                     <h1 className="text-lg font-semibold xl:text-2xl">SQUIZ</h1>
                   </Link>
                 ) : (
-                  <h1 className="text-lg font-semibold xl:text-2xl">SQUIZ</h1>
+                  <h1 className="select-none text-lg font-semibold xl:text-2xl">
+                    SQUIZ
+                  </h1>
                 )}
               </div>
             </div>
@@ -74,12 +76,10 @@ const Header = () => {
                 <GrNotification className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-primary" />
               </button>
             </div> */}
-              <div className="group relative flex h-[70px] cursor-pointer items-center rounded">
-                <div className="relative flex h-[60px] cursor-pointer items-center gap-2 rounded">
+              <div className="group relative flex h-[70px] items-center rounded">
+                <div className="relative flex h-[60px] items-center gap-2 rounded">
                   {user ? (
-                    <p className="font-medium text-[--color-text-link]">
-                      197CT09794 - Minh Khôi - HTML
-                    </p>
+                    <></>
                   ) : (
                     <p className="font-medium text-[--color-text-link]">
                       You are not logged in.
@@ -88,12 +88,11 @@ const Header = () => {
 
                   {user && (
                     <Image
-                      src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625"
+                      src="/images/avatar-default.png"
                       className="rounded-full"
                       width={35}
                       height={35}
                       alt="Picture of the author"
-                      loading="lazy"
                     />
                   )}
                   {user ? (
@@ -107,7 +106,7 @@ const Header = () => {
                     <div className="cursor-default">
                       <div className="flex w-[95%] items-center gap-3 px-4 py-3">
                         <Image
-                          src={`${user ? "https://scontent.fsgn5-12.fna.fbcdn.net/v/t1.6435-1/139131444_3393715627406941_8376925531107375232_n.jpg?stp=c0.0.200.200a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeElVGQvtfcOvMLiikwk_sN0-93hX0BTTBD73eFfQFNMEFCHvxt4v-r5af3_QzPpz5EN6KCcE820BUiwV24oApZu&_nc_ohc=HiiP0XEe37kAX_uigNm&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGbsoMRfkKZ7cD3o8HzDKlvPVp-CfSbfEBqI3cLxVuyA&oe=6618D625" : "/assets/avatar-default.svg"}`}
+                          src="/images/avatar-default.png"
                           className="rounded-full"
                           width={55}
                           height={55}

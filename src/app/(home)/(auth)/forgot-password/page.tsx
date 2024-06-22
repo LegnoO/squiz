@@ -1,13 +1,10 @@
 "use client";
 
-// React Imports
-import { useState, useRef } from "react";
+// ** React Imports
+import { useState, useRef, SyntheticEvent, KeyboardEvent } from "react";
 
-// ** Next Imports
-import Link from "next/link";
-
-// ** Icons
-import { FcGoogle } from "react-icons/fc";
+// ** Hooks
+import { useRouter } from "next-nprogress-bar";
 
 // ** Components
 import Button from "@/components/Button";
@@ -15,11 +12,14 @@ import Input from "@/components/Input";
 
 // ** Utils
 import { isEmptyString } from "@/utils/stringEmpty";
+import { handleAxiosError } from "@/utils/errorHandler";
+import { playToast } from "@/utils/ToastMessage";
 
 // ** Services
 import { forgotPassword, resetPassword, verifyOtp } from "@/services/auth";
 
 const ForgotPassword = ({}) => {
+  const router = useRouter();
   const newPasswordFieldRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const emailFieldRef = useRef<HTMLInputElement>(null);
@@ -38,55 +38,61 @@ const ForgotPassword = ({}) => {
   });
   const [step, setStep] = useState<number>(1);
 
-  const handleSubmit = async () => {
+  function handleKeyDown(event: KeyboardEvent<HTMLFormElement>) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  }
+
+  const handleSubmit = async (event: SyntheticEvent) => {
+    event.preventDefault();
     setIsLoading(true);
 
     if (step === 1) {
-      const { message } = await forgotPassword({ email });
-      if (message) {
+      try {
+        await forgotPassword({ email });
         setMessageField(() => {
           return { success: "Mã OTP đã được gửi đến email của bạn." };
         });
         setStep(2);
-      } else {
+      } catch (error) {
+        handleAxiosError(error);
         setMessageField(() => {
           return { error: "Email không tồn tại." };
         });
       }
     }
     if (step === 2) {
-      setMessageField({});
-      const { message } = await verifyOtp({ otp, email });
-      if (message) {
+      try {
+        await verifyOtp({ otp, email });
         setMessageField(() => {
           return { success: "Mã OTP đã được gửi đến email của bạn." };
         });
+        setMessageField({});
         setStep(3);
-      } else {
+      } catch (error) {
+        handleAxiosError(error);
         setMessageField(() => {
           return { error: "Mã OTP không hợp lệ." };
         });
       }
-      setMessageField({});
     }
 
     if (step === 3) {
-      setMessageField({});
       if (newPassword === confirmPassword) {
-        const { error, message } = await resetPassword({
-          otp,
-          email,
-          newPassword,
-          confirmNewPassword: confirmPassword,
-        });
-        if (message) {
-          setMessageField(() => {
-            return { success: message };
+        try {
+          resetPassword({
+            otp,
+            email,
+            newPassword,
+            confirmNewPassword: confirmPassword,
           });
-          setStep(2);
-        } else {
+          playToast("success", "Đổi mật khẩu thành công!");
+          router.push("/signin");
+        } catch (error) {
+          handleAxiosError(error);
           setMessageField(() => {
-            return { error };
+            return { error: "'Đổi mật khẩu thất bại!" };
           });
         }
       } else {
@@ -101,11 +107,15 @@ const ForgotPassword = ({}) => {
 
   return (
     <div className="bg-[--background-primary-main] py-12">
-      <form className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]">
+      <form
+        onKeyDown={handleKeyDown}
+        className="mx-auto w-full max-w-[35rem] px-[4.8rem] py-[2.4rem] md:max-w-[30rem]">
         <div className="">
-          <h1 className="text-medium mb-3 text-base font-bold text-primary">
-            Tìm Email của bạn
-          </h1>
+          {step === 1 && (
+            <h2 className="text-medium mb-3 text-base font-bold text-primary">
+              Tìm Email của bạn
+            </h2>
+          )}
 
           {step == 1 && (
             <div className="group relative mb-3 rounded md:w-auto">
@@ -133,6 +143,9 @@ const ForgotPassword = ({}) => {
 
           {step == 2 && (
             <>
+              <h2 className="text-medium mb-3 text-base font-bold text-primary">
+                Xác nhận mã OTP
+              </h2>
               <div className="group relative mb-3 rounded md:w-auto">
                 <Input
                   required
@@ -163,6 +176,9 @@ const ForgotPassword = ({}) => {
           </div>
           {step == 3 && (
             <>
+              <h2 className="text-medium mb-3 text-base font-bold text-primary">
+                Đổi mật khẩu
+              </h2>
               <div className="group relative mb-3 rounded md:w-auto">
                 <Input
                   required
@@ -211,7 +227,7 @@ const ForgotPassword = ({}) => {
 
           <div className="mb-3 mt-5">
             <Button onClick={handleSubmit} isLoading={isLoading}>
-            Gửi yêu cầu
+              Gửi yêu cầu
             </Button>
           </div>
         </div>

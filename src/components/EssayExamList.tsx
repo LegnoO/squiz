@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next-nprogress-bar";
 
 import { Button } from "@/components/ui/button";
-import { IEssayList } from "@/types/essay";
+import { IEssayList } from "@/types/Essay";
 import AxiosInstance from "@/config/axios";
 import { toast } from "react-toastify";
 import { handleAxiosError } from "@/utils/errorHandler";
@@ -26,14 +26,14 @@ const EssayExamList = ({ essayList }: { essayList: IEssayList[] }) => {
         Danh sách đề thi tự luận
       </div>
       {essayList.length > 0 ? (
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {essayList.map((essay) => (
             <Card key={essay._id}>
               <CardHeader>
                 <CardTitle>{essay.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="min-h-[144px] grid gap-2">
+                <div className="grid min-h-[144px] gap-2">
                   <div>
                     <strong>Total Time:</strong>{" "}
                     <span className="font-medium">

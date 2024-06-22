@@ -10,7 +10,7 @@ import { ColorRing } from "react-loader-spinner";
 import { GrFormNextLink } from "react-icons/gr";
 import { GrFormPreviousLink } from "react-icons/gr";
 // Types
-import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/quiz";
+import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/Quiz";
 import Header from "../../../components/Header";
 import dynamic from "next/dynamic";
 import AxiosInstance from "@/config/axios";
@@ -125,10 +125,10 @@ export default function QuizPage({ params }: { params: { id: string } }) {
       const updatedList: IAnswer[] = newListAnswer.map((x) =>
         x.question._id === id
           ? {
-            ...x,
-            answer_select:
-              x.answer_select === answer_select ? null : answer_select,
-          }
+              ...x,
+              answer_select:
+                x.answer_select === answer_select ? null : answer_select,
+            }
           : x,
       );
       setQuizAnswer({
@@ -159,7 +159,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           id: quizAnswerId,
         },
       );
-      toast.success("Nộp bài thành công")
+      toast.success("Nộp bài thành công");
       router.back();
     } catch (error) {
       handleAxiosError(error);

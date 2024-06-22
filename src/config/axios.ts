@@ -34,7 +34,7 @@ const refreshToken = async (): Promise<string> => {
 AxiosInstance.interceptors.request.use((config) => {
   const accessToken: string = localStorage.getItem("jwt")!;
 
-  if (accessToken && !config.headers.Authorization) {
+  if (accessToken && config.headers && !config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
 

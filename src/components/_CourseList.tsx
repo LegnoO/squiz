@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 
 // Types
-import { CourseListType } from "@/types/course";
+import { CourseListType } from "@/types/Course";
 
 // Components
 

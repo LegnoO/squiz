@@ -9,17 +9,21 @@ import {
   ReactNode,
 } from "react";
 
-
 // ** Utils
 import { handleAxiosError } from "@/utils/errorHandler";
 
+// ** Components
+import { useRouter } from "next-nprogress-bar";
+
 // ** Services
 import { getUserInfo, loginUser } from "@/services/auth";
-import { IUser } from "@/types/user";
+
+// ** Hooks
 import { useNavigationEvent } from "@/hooks/useNavigationEvent";
-import { useRouterPush } from "@/hooks/useRouterPush";
 
 // ** Types
+import { IUser } from "@/types/User";
+
 // type AuthValuesType = {
 //     loading: boolean
 //     logout: () => void
@@ -41,9 +45,9 @@ const defaultProvider: any = {
 const AuthContext = createContext(defaultProvider);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const pushRoute = useRouterPush();
 
   useNavigationEvent(() => {
     if (loading) setLoading(false);
@@ -51,9 +55,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem("jwt")!
-        : "";
+      typeof window !== "undefined" ? localStorage.getItem("jwt")! : "";
 
     const initAuth = async () => {
       if (token) {
@@ -81,7 +83,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       await loginUser({ email, password });
       const userData = await getUserInfo();
       setUser(userData);
-      pushRoute("/");
+      router.push("/");
     } catch (error) {
       handleAxiosError(error);
       setLoading(false);
@@ -93,7 +95,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("userData");
     localStorage.removeItem("refresh_token");
     setUser(null);
-    pushRoute('/signin');
+    router.push("/signin");
   };
 
   const values = {
@@ -102,7 +104,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     // setUser,
     // setLoading,
     login: handleLogin,
-    logout: handleLogout
+    logout: handleLogout,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

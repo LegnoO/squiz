@@ -13,9 +13,8 @@ import EssayExamList from "@/components/EssayExamList";
 import AxiosInstance from "@/config/axios";
 
 // **  Types
-import { IQuizList } from "@/types/quiz";
-import { IEssayList } from "@/types/essay";
-
+import { IQuizList } from "@/types/Quiz";
+import { IEssayList } from "@/types/Essay";
 
 export default function ListExamPage({ params }: { params: { id: string } }) {
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
@@ -33,17 +32,17 @@ export default function ListExamPage({ params }: { params: { id: string } }) {
     getCourse();
   }, [params.id]);
 
-
-
   return (
     <>
-      <Header />
-      <div className="py-12 px-8">
-        <QuizExamList quizList={quizList} />
-        <div className="my-12" />
-        <EssayExamList essayList={essayList} />
+      <div className="flex min-h-full flex-col">
+        <Header />
+        <div className="container flex-1 my-14">
+          <QuizExamList quizList={quizList} />
+          <div className="my-12"/>
+          <EssayExamList essayList={essayList} />
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }

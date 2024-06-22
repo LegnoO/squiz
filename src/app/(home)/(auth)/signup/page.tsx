@@ -1,20 +1,24 @@
 "use client";
 
-// Hook
+// ** React Imports
 import { useState, useRef } from "react";
-import { useRouter } from "next-nprogress-bar";
+
+// ** Next Imports
 import Link from "next/link";
-// Icons
-import { FcGoogle } from "react-icons/fc";
-// Components
+
+// ** Hooks
+import { useRouter } from "next-nprogress-bar";
+
+// ** Components
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-
-// Utils
-import { isEmptyString } from "@/utils/stringEmpty";
-// Services
-import { registerUser, getUserInfo } from "@/services/auth";
 import { playToast } from "@/utils/ToastMessage";
+
+// ** Utils
+import { isEmptyString } from "@/utils/stringEmpty";
+
+// ** Services
+import { registerUser, getUserInfo } from "@/services/auth";
 
 const Register = ({}) => {
   const fullNameFieldRef = useRef<HTMLInputElement>(null);
@@ -24,26 +28,19 @@ const Register = ({}) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const access_token = await registerUser({
+    await registerUser({
       email,
       password,
       role: "student",
     });
+    await getUserInfo();
+    playToast("success", "Đăng ký thành công");
+    router.push("/");
     setIsLoading(false);
-    if (access_token) {
-      const { data } = await getUserInfo();
-
-      if (data) {
-        dispatch(updateInfoUser({ userInfo: data }));
-        playToast("success", "Đăng ký thành công");
-        router.push("/");
-      }
-    }
   };
 
   return (
@@ -128,7 +125,10 @@ const Register = ({}) => {
             </label>
           </div>
           <div className="mb-3 mt-5">
-            <Button onClick={handleSubmit} isLoading={isLoading}>
+            <Button
+              disabled={isLoading}
+              onClick={handleSubmit}
+              isLoading={isLoading}>
               Đăng ký
             </Button>
           </div>

@@ -1,10 +1,9 @@
 "use client";
 // Hooks
-import {  useState } from "react";
+import { useState } from "react";
 
 // Next
 import Link from "next/link";
-
 
 // Components
 import ClickOutsideHandler from "./ClickAwayListenerCustom";
@@ -12,7 +11,7 @@ import Modal from "./Modal";
 
 // Icon
 import { CiClock2 } from "react-icons/ci";
-import { ICourseList } from "@/types/course";
+import { ICourseList } from "@/types/Course";
 
 export default function QuizList({
   courseList,

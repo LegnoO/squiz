@@ -7,7 +7,6 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { AuthProvider } from "@/context/AuthContext";
 import AuthGuard from "@/components/AuthGuard";
 import NextProgressBar from "@/components/NextProgressBar";
-import "nprogress/nprogress.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
