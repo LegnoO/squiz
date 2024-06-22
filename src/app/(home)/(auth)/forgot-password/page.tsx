@@ -1,23 +1,24 @@
 "use client";
 
-// Hook
-import { useState, useRef, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { redirect, useRouter } from "next/navigation";
+// React Imports
+import { useState, useRef } from "react";
+
+// ** Next Imports
 import Link from "next/link";
-// Icons
+import { useRouter } from "next/navigation";
+
+// ** Icons
 import { FcGoogle } from "react-icons/fc";
-// Components
+
+// ** Components
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 
-// Utils
+// ** Utils
 import { isEmptyString } from "@/utils/stringEmpty";
-// Services
+
+// ** Services
 import { forgotPassword, resetPassword, verifyOtp } from "@/services/auth";
-import { updateInfoUser } from "@/redux/features/userSlice";
-import { playToast } from "@/utils/ToastMessage";
-import { BiMessage } from "react-icons/bi";
 
 const ForgotPassword = ({}) => {
   const newPasswordFieldRef = useRef<HTMLInputElement>(null);
@@ -37,7 +38,7 @@ const ForgotPassword = ({}) => {
     error: "",
   });
   const [step, setStep] = useState<number>(1);
-  const dispatch = useAppDispatch();
+
   const router = useRouter();
 
   const handleSubmit = async () => {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { changePassword, updateUserProfile } from "@/services/auth";
 import { playToast } from "@/utils/ToastMessage";
-import useMount from "@/components/useMount";
+import useMount from "@/hooks/useMount";
 import { useAuth } from "@/context/AuthContext";
 
 export default function SettingPage() {

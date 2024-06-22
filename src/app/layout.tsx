@@ -6,6 +6,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { AuthProvider } from "@/context/AuthContext";
 import AuthGuard from "@/components/AuthGuard";
+import NextProgressBar from "@/components/NextProgressBar";
 import "nprogress/nprogress.css";
 
 export const metadata: Metadata = {
@@ -21,16 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-          <AuthProvider>
-            <AuthGuard>
-              <>
-                {children}
-                <ToastContainer />
-              </>
-            </AuthGuard>
-          </AuthProvider>
+        <NextProgressBar />
+        <AuthProvider>
+          <AuthGuard>
+            <>
+              {children}
+              <ToastContainer />
+            </>
+          </AuthGuard>
+        </AuthProvider>
       </body>
-
     </html>
   );
 }

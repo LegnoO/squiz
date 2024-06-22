@@ -3,8 +3,6 @@
 import { useEffect } from "react";
 import {
   usePathname,
-  redirect,
-  useSearchParams,
   useRouter,
 } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";

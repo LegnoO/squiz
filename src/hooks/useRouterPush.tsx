@@ -1,11 +1,11 @@
 import { useRouter } from 'next/navigation';
-import nProgress from 'nprogress';
+import NProgress from "@/config/nProgress"
 
 export const useRouterPush = () => {
   const router = useRouter();
 
   const pushRoute = (href: string) => {
-    nProgress.start();
+    NProgress.start();
     router.push(href);
   };
 

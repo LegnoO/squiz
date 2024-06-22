@@ -1,4 +1,3 @@
-import { useAuth } from "@/context/AuthContext";
 import axios, { AxiosError } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,7 +12,7 @@ const AxiosInstance = axios.create({
 const refreshToken = async (): Promise<string> => {
   try {
     const refreshToken: string = localStorage.getItem("refresh_token")!;
-    const response = await AxiosInstance.post(
+    const response = await axios.post(
       `${API_URL}/auth/user/refresh`,
       {},
       {

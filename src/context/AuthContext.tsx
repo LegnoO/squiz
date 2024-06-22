@@ -9,8 +9,6 @@ import {
   ReactNode,
 } from "react";
 
-// ** Next Imports
-import { useRouter, usePathname } from "next/navigation";
 
 // ** Utils
 import { handleAxiosError } from "@/utils/errorHandler";
@@ -61,13 +59,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         try {
           setLoading(true);
-          console.log("test0")
           const userData = await getUserInfo();
-          console.log("test1")
           setUser(userData);
           setLoading(false);
         } catch (error) {
-          console.log("test2")
           setUser(null);
           setLoading(false);
           handleAxiosError(error);

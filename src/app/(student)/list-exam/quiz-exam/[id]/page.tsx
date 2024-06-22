@@ -153,7 +153,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
 
   async function handleSubmit() {
     try {
-      const res = await AxiosInstance.post(
+      await AxiosInstance.post(
         "https://e-learming-be.onrender.com/quiz-answer/update-final",
         {
           id: quizAnswerId,
