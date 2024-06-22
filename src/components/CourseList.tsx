@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 // Types
-import {  ICourseList } from "@/types/course";
+import { ICourseList } from "@/types/course";
 
 // Components
 

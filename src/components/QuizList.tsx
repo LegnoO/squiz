@@ -1,10 +1,10 @@
 "use client";
 // Hooks
-import { Dispatch, SetStateAction, useState } from "react";
+import {  useState } from "react";
 
 // Next
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 
 // Components
 import ClickOutsideHandler from "./ClickAwayListenerCustom";

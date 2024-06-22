@@ -1,34 +1,23 @@
 "use client";
 
-// Hooks
+// ** React Imports
 import { useEffect, useState } from "react";
-// Components
+
+// **  Components
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ClickOutsideHandler from "@/components/ClickAwayListenerCustom";
-import Modal from "@/components/Modal";
-import QuizList from "@/components/QuizList";
-// Fake Data
-import { CourseListData } from "@/FakeData/CourseList";
-import { redirect, useRouter } from "next/navigation";
-import AxiosInstance from "@/config/axios";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-import { IQuizList } from "@/types/quiz";
-import { IEssayList } from "@/types/essay";
 import QuizExamList from "@/components/QuizExamList";
 import EssayExamList from "@/components/EssayExamList";
 
+// **  Config
+import AxiosInstance from "@/config/axios";
+
+// **  Types
+import { IQuizList } from "@/types/quiz";
+import { IEssayList } from "@/types/essay";
+
+
 export default function ListExamPage({ params }: { params: { id: string } }) {
-  const router = useRouter();
   const [quizList, setQuizList] = useState<IQuizList[]>([]);
   const [essayList, setEssayList] = useState<IEssayList[]>([]);
 
@@ -44,11 +33,7 @@ export default function ListExamPage({ params }: { params: { id: string } }) {
     getCourse();
   }, [params.id]);
 
-  const handleEnterQuizPage = (id: string) => {
-    if (id) {
-      router.push(`/quiz/exam/${id}`);
-    }
-  };
+
 
   return (
     <>

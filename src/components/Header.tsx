@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 // ** Next Imports
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 

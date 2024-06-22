@@ -49,7 +49,7 @@ AxiosInstance.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       error.config &&
-      !error.response?.config?.url?.includes("signin") &&
+      !error.response?.config?.url?.includes("/signin") &&
       !error.response?.config?.url?.includes("/auth/user/refresh")
     ) {
       try {

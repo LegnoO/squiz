@@ -1,7 +1,7 @@
 "use client";
 
 // ** Next
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import Link from "next/link";
 
 // ** Socket

@@ -5,7 +5,6 @@ import { useState, useRef } from "react";
 
 // ** Next Imports
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 // ** Icons
 import { FcGoogle } from "react-icons/fc";
@@ -38,8 +37,6 @@ const ForgotPassword = ({}) => {
     error: "",
   });
   const [step, setStep] = useState<number>(1);
-
-  const router = useRouter();
 
   const handleSubmit = async () => {
     setIsLoading(true);

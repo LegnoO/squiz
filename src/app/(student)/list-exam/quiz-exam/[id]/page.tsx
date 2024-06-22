@@ -15,7 +15,7 @@ import Header from "../../../components/Header";
 import dynamic from "next/dynamic";
 import AxiosInstance from "@/config/axios";
 import { handleAxiosError } from "@/utils/errorHandler";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import { toast } from "react-toastify";
 
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {

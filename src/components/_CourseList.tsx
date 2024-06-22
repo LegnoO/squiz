@@ -1,11 +1,10 @@
 "use client";
-// Hooks
-import { Dispatch, SetStateAction, useState } from "react";
+// ** React Imports
+import { Dispatch, SetStateAction } from "react";
 
-// Next
-import Image from "next/image";
+// ** Next Imports
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 // Types
 import { CourseListType } from "@/types/course";
 

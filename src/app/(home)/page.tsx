@@ -1,18 +1,23 @@
 "use client";
 
-// Hooks
+// ** React Imports
 import { useEffect, useState } from "react";
 
-// Components
+// ** Hooks
+import { useRouter } from "next-nprogress-bar";
+
+// ** Components
 import CourseList from "@/components/CourseList";
 
-// Fake Data
+// ** Config
 import AxiosInstance from "@/config/axios";
+
+// ** Types
 import { ICourseList } from "@/types/course";
-import { useRouterPush } from "@/hooks/useRouterPush";
+
 
 export default function Home() {
-  const pushRoute = useRouterPush();
+  const router = useRouter();
   const [courseList, setCourseList] = useState<ICourseList[]>([]);
 
 
@@ -28,7 +33,7 @@ export default function Home() {
 
   const handleEnterQuizPage = (id: string) => {
     if (id) {
-      pushRoute(`/list-exam/${id}`);
+      router.push(`/list-exam/${id}`);
     }
   };
 

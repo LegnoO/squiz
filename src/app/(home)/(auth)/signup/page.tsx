@@ -2,8 +2,7 @@
 
 // Hook
 import { useState, useRef } from "react";
-import { useAppDispatch } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 import Link from "next/link";
 // Icons
 import { FcGoogle } from "react-icons/fc";
@@ -15,7 +14,6 @@ import Input from "@/components/Input";
 import { isEmptyString } from "@/utils/stringEmpty";
 // Services
 import { registerUser, getUserInfo } from "@/services/auth";
-import { updateInfoUser } from "@/redux/features/userSlice";
 import { playToast } from "@/utils/ToastMessage";
 
 const Register = ({}) => {

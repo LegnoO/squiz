@@ -1,7 +1,7 @@
 "use client";
 
 // ** Next
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 
 // ** React
 import { useEffect } from "react";
@@ -33,6 +33,7 @@ export default function InstructionsPage({
       }
     });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

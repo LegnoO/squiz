@@ -1,7 +1,7 @@
 "use client";
 
 // ** Nextjs
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 
 // ** React
 import { useState, useEffect, useRef, MouseEvent } from "react";

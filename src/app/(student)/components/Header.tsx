@@ -6,7 +6,7 @@ const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
 
 // Icons
 import { IoMdArrowBack } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
 
 const Header = () => {
   const router = useRouter()

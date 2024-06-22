@@ -1,5 +1,5 @@
-// ** Nextjs components
-import { useRouter } from "next/navigation";
+// ** Next Imports
+import { useRouter } from "next-nprogress-bar";
 
 // ** Shadcn UI components
 import {
