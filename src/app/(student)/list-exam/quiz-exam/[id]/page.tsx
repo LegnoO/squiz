@@ -1,28 +1,38 @@
 "use client";
-// Hooks
+
+// ** React Imports
 import { useState, useEffect } from "react";
 
-// Component
+// ** Next Imports
+import dynamic from "next/dynamic";
+
+// **  Component
+import Header from "@/components/Header";
 import { Carousel } from "react-responsive-carousel";
 import { ColorRing } from "react-loader-spinner";
-
-// Icon
-import { GrFormNextLink } from "react-icons/gr";
-import { GrFormPreviousLink } from "react-icons/gr";
-// Types
-import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/Quiz";
-import Header from "../../../components/Header";
-import dynamic from "next/dynamic";
-import AxiosInstance from "@/config/axios";
-import { handleAxiosError } from "@/utils/errorHandler";
-import { useRouter } from "next-nprogress-bar";
 import { toast } from "react-toastify";
-
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
   ssr: false,
 });
 
-export default function QuizPage({ params }: { params: { id: string } }) {
+// ** Icon
+import { GrFormNextLink } from "react-icons/gr";
+import { GrFormPreviousLink } from "react-icons/gr";
+
+// ** Config
+import AxiosInstance from "@/config/axios";
+
+// ** Types
+import { IAnswer, IQuizAnswer, IQuizQuestion } from "@/types/Quiz";
+
+// ** Utils
+import { handleAxiosError } from "@/utils/errorHandler";
+
+// ** Hooks
+import { useRouter } from "next-nprogress-bar";
+
+
+export default function QuizExamPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [quizAnswerId, setQuizAnswerId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
@@ -31,6 +41,19 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [quizQuestion, setQuizQuestion] = useState<any[] | []>([]);
   const [totalTime, setTotalTime] = useState<number>(0);
+
+  const [quizAnswer, setQuizAnswer] = useState<IQuizAnswer>(() => {
+    return {
+      quiz_exam_id: "",
+      answers: quizQuestion?.map((x: IQuizQuestion) => ({
+        question: {
+          _id: x.id,
+        },
+        answer_select: 0,
+      })),
+    };
+  });
+
   useEffect(() => {
     const getQuizExam = async () => {
       try {
@@ -40,7 +63,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
             quiz_id: params.id,
           },
         );
-        console.log("🚀 ~ getQuizExam ~ res:", res);
+        
         setTitle(res.data.res.title);
         setQuizAnswerId(res.data.res.quiz_answer_id);
         setQuizAnswer((prev) => ({
@@ -54,27 +77,24 @@ export default function QuizPage({ params }: { params: { id: string } }) {
           setQuizQuestion(res.data.res.dataExam);
         } else {
           setQuizQuestion(res.data.res.dataExam.map((x: any) => x.question));
+        
+          setQuizAnswer((prev) => ({
+            ...prev,
+            answers:res.data.res.dataExam,
+          }));
+     
+          
         }
       } catch (error) {
         router.back();
         handleAxiosError(error);
       }
+  
     };
 
     getQuizExam();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [quizAnswer, setQuizAnswer] = useState<IQuizAnswer>(() => {
-    return {
-      quiz_exam_id: "",
-      answers: quizQuestion?.map((x: IQuizQuestion) => ({
-        question: {
-          _id: x.id,
-        },
-        answer_select: 0,
-      })),
-    };
-  });
 
   const handleUpdateAnswer = async (next: "next" | null) => {
     if (quizAnswer.answers.length > 0) {
@@ -170,7 +190,7 @@ export default function QuizPage({ params }: { params: { id: string } }) {
     <div className="h-screen bg-[--background-surface-color]">
       <Header />
       <div className="h-full w-full pt-[2rem]">
-        <div className="flex justify-center gap-4 pr-[1.5rem] md:pl-[2.5rem]">
+        <div className="flex justify-center gap-4 px-[1.5rem]">
           <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
             <div className="mb-3 text-lg font-semibold">Môn: {title}</div>
 

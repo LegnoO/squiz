@@ -1,0 +1,32 @@
+.NavLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 99px;
+    transition: 200ms ease-in 0s;
+
+    &.NavLinkActive {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+
+
+    & a {
+        font-size: 0.875rem;
+        font-weight: 400;
+        color: #131B20;
+        padding-block: 0.375rem;
+        padding-inline: 0.75rem;
+    }
+
+
+    & .NavLinkDropdown {
+        position: absolute;
+        top: 100%;
+        margin-top: 0.5rem;
+    }
+}

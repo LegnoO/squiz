@@ -1,40 +1,39 @@
 "use client";
-// Nextjs
+
+// ** Next Imports
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next-nprogress-bar";
-// Hooks
+import dynamic from "next/dynamic";
+
+// ** React Imports
 import { useState, useEffect } from "react";
 
-// Component
-import { Carousel } from "react-responsive-carousel";
-import { ColorRing } from "react-loader-spinner";
+// **  Hooks
+import { useRouter } from "next-nprogress-bar";
+import { useDropzone } from "react-dropzone";
+
+// **  Component
+import Header from "@/components/Header";
 import ReactDraftWysiwyg from "@/components/react-draft-wysiwyg";
-//
-import axios from "axios";
-
-// Icon
-import { GrFormNextLink } from "react-icons/gr";
-import { GrFormPreviousLink } from "react-icons/gr";
-import { AiOutlineCloudUpload } from "react-icons/ai";
-import { FaRegFileWord } from "react-icons/fa";
-
-// Types
-import { IAnswer, IQuizAnswer, IQuizExam, IQuizQuestion } from "@/types/Quiz";
-import Header from "../../../components/Header";
-import dynamic from "next/dynamic";
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), {
   ssr: false,
 });
 
-// ** Third Party Imports
+// ** Icon
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { FaRegFileWord } from "react-icons/fa";
+
+// ** Lib Imports
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 
-// Lib
-import { useDropzone } from "react-dropzone";
+// ** Config
 import AxiosInstance from "@/config/axios";
-import { handleAxiosError } from "@/utils/errorHandler";
 
+// ** Utils
+import { handleAxiosError } from "@/utils/errorHandler";
+import { htmlToDraftBlocks } from "@/utils/draft";
+
+// ** Types
 interface IFileProp {
   name: string;
   type: string;
@@ -50,10 +49,32 @@ interface IEssayExam {
   total_time_left: string;
 }
 
+interface IEssayExamData {
+  _id: string;
+  essay_exam_id: string;
+  student_id: string;
+  content_answers: string;
+  file_upload: string[];
+  status: string;
+  createAt: Date | null;
+  time_out: Date | null;
+}
+
 // test[test.length - 2].concat(" ",test[test.length - 1].slice(0, test[test.length - 1].lastIndexOf(".")))
-export default function QuizPage({ params }: { params: { id: string } }) {
+export default function EssayExamPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [dataAnswer, setDataAnswer] = useState<IEssayExamData>({
+    _id: "",
+    essay_exam_id: "",
+    student_id: "",
+    content_answers: "",
+    file_upload: [],
+    status: "",
+    createAt: null,
+    time_out: null,
+  });
+  const [isFirstJoin, setFirstJoin] = useState<boolean>(true);
   const [idAnswer, setIdAnswer] = useState<string>("");
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -93,8 +114,18 @@ export default function QuizPage({ params }: { params: { id: string } }) {
         );
         setTimeLeft(Math.floor(res.data.total_time_left));
         setEssayExam(res.data.data_test);
-        setIdAnswer(res.data.essay_exam_answer_id);
+        if (res.data.isFirst) {
+          setIdAnswer(res.data.essay_exam_answer_id);
+        } else {
+          setFirstJoin(false);
+          setDataAnswer(res.data.data_answer);
+          setIdAnswer(res.data.data_test._id);
+          setEditorState(
+            htmlToDraftBlocks(res.data.data_answer.content_answers),
+          );
+        }
       } catch (error) {
+        console.log(error);
         router.back();
         handleAxiosError(error);
       }
@@ -113,22 +144,40 @@ export default function QuizPage({ params }: { params: { id: string } }) {
   }
 
   useEffect(() => {}, [files]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleSubmit() {
     const formData = new FormData();
-    formData.append("content_answers", content);
-    formData.append("file_essay_answer", files[0]);
+
     try {
-      const res = await AxiosInstance.post(
-        `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${idAnswer}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
+      if (isFirstJoin) {
+        formData.append("content_answers", content);
+        formData.append("file_essay_answer", files[0]);
+        await AxiosInstance.post(
+          `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${idAnswer}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           },
-        },
-      );
+        );
+      } else {
+        formData.append("content_answers", dataAnswer.content_answers);
+        formData.append(
+          "file_essay_answer",
+          files[0] || dataAnswer.file_upload[0],
+        );
+        await AxiosInstance.put(
+          `https://e-learming-be.onrender.com/essay-exam-answer/update-essay-exam-answer/${idAnswer}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+      }
+
       router.back();
     } catch (error) {
       handleAxiosError(error);
@@ -213,6 +262,8 @@ export default function QuizPage({ params }: { params: { id: string } }) {
                   })}>
                   {files.length ? (
                     img[0].key
+                  ) : dataAnswer.file_upload.length > 0 ? (
+                    dataAnswer.file_upload
                   ) : (
                     <div className="flex flex-col items-center gap-2">
                       <AiOutlineCloudUpload className="h-[2rem] w-[2rem]" />

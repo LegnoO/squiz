@@ -2,7 +2,6 @@
 
 // ** Next
 import { useRouter } from "next-nprogress-bar";
-import Link from "next/link";
 
 // ** Socket
 import { socket } from "@/app/socket";
@@ -18,6 +17,9 @@ import Loading from "@/components/Loading";
 
 // ** Icons
 import Icon from "@/components/Icon";
+
+// ** Utils
+import { processName } from "@/utils/processName";
 
 // ** Types
 interface IAnswerCorrect {
@@ -41,7 +43,8 @@ export default function GameBlockPage({
 }) {
   const router = useRouter();
   const [selectAnswer, setSelectAnswer] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [firstJoin, setFirstJoin] = useState<boolean>(true);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [questionLength, setQuestionLength] = useState<number>(0);
@@ -50,11 +53,18 @@ export default function GameBlockPage({
     correctAnswerIndex: null,
   });
 
+  const userData =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("userData")!)
+      : "";
+  const userEmail = userData ? userData.email : null;
+  const userName = userEmail ? userEmail.split("@")[0] : "";
+
   function handleAnswerSelect(index: number) {
     console.log({
       roomId: params.roomId,
       answerIndex: index,
-    })
+    });
     if (answerCorrect.correctAnswerIndex === null && selectAnswer === null) {
       setSelectAnswer(index);
 
@@ -62,7 +72,6 @@ export default function GameBlockPage({
         roomId: params.roomId,
         answerIndex: index,
       });
-
     }
   }
 
@@ -92,6 +101,28 @@ export default function GameBlockPage({
     return buttonStyles;
   }
 
+  const renderInstruction = () => {
+    return (
+      <div className="h-full w-full">
+        <div className="flex h-full items-center justify-center">
+          <main className="max-w-[320px] text-center">
+            <div className="grid place-items-center gap-4">
+              <div className="justify-content flex h-[50px] w-[50px] items-center rounded-full bg-gray-200">
+                <p className="w-full text-2xl">{processName(userName)}</p>
+              </div>
+              <div className="text-2xl font-bold">{userName}</div>
+            </div>
+            <div className="mt-3 text-base font-bold">
+              You are in! See your nickname on screen?
+            </div>
+
+            {/* {window.history.state.userName} */}
+          </main>
+        </div>
+      </div>
+    );
+  };
+
   const renderLoading = () => {
     return (
       <div className="flex h-full items-center justify-center">
@@ -119,6 +150,7 @@ export default function GameBlockPage({
     });
 
     socket.on("countdown", (countdown) => {
+      setFirstJoin(false)
       setCountdown(countdown);
       if (countdown > 0 && questionLength === 0) {
         setIsLoading(true);
@@ -154,6 +186,10 @@ export default function GameBlockPage({
 
   if (isLoading) {
     return renderLoading();
+  }
+
+  if (firstJoin && !isLoading) {
+    return renderInstruction();
   }
 
   return (

@@ -3,7 +3,7 @@
 // ** Nextjs
 import { useRouter } from "next-nprogress-bar";
 
-// ** React
+// ** React Imports
 import { useState, useEffect, useRef, MouseEvent } from "react";
 
 // ** Socket
@@ -26,7 +26,6 @@ export default function JoinPage() {
     userEmail ? userEmail.split("@")[0] : "",
   );
 
-
   function joinRoom(event: MouseEvent<HTMLElement>) {
     event.preventDefault();
     socket.emit("joinRoom", {
@@ -43,14 +42,13 @@ export default function JoinPage() {
   function handleSubmit() {
     setIsLoading(true);
     window.history.pushState({ userName }, "", null);
-    router.push(`instructions/${inputPinRef?.current?.value}`);
+    router.push(`gameblock/${inputPinRef?.current?.value}`);
   }
 
   useEffect(() => {
     socket.connect();
 
     socket.on("joinRoomError", (error) => {
-      console.log("test");
       setError(error);
     });
 
@@ -59,7 +57,7 @@ export default function JoinPage() {
       handleSubmit();
     });
 
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = ""; // Setting this property is necessary for some browsers
     };
@@ -69,6 +67,7 @@ export default function JoinPage() {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -77,7 +76,7 @@ export default function JoinPage() {
         <main className="max-w-[320px] text-center">
           <h2 className="mb-4 text-3xl font-bold">Squiz</h2>
           <form
-            className={`flex w-[300px] flex-col gap-2.5 items-center justify-center rounded ${isLoading ? "bg-transparent" : "bg-white"} p-4 shadow`}>
+            className={`flex w-[300px] flex-col items-center justify-center gap-2.5 rounded ${isLoading ? "bg-transparent" : "bg-white shadow"} p-4`}>
             {isLoading && <Loading />}
             {!inputPinRef?.current?.value && (
               <>

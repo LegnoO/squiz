@@ -38,7 +38,7 @@ const defaultProvider: any = {
   loading: true,
   setUser: () => null,
   setLoading: () => Boolean,
-  login: () => Promise.resolve(),
+  login: () => Promise<void>,
   logout: () => Promise.resolve(),
 };
 
