@@ -7,6 +7,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { AuthProvider } from "@/context/AuthContext";
 import AuthGuard from "@/components/AuthGuard";
 import NextProgressBar from "@/components/NextProgressBar";
+import { ExamProvider } from "@/context/ExamContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,14 +23,16 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <NextProgressBar />
-        <AuthProvider>
-          <AuthGuard>
-            <>
-              {children}
-              <ToastContainer />
-            </>
-          </AuthGuard>
-        </AuthProvider>
+        <ExamProvider>
+          <AuthProvider>
+            <AuthGuard>
+              <>
+                {children}
+                <ToastContainer />
+              </>
+            </AuthGuard>
+          </AuthProvider>
+        </ExamProvider>
       </body>
     </html>
   );

@@ -28,10 +28,7 @@ export default function JoinPage() {
 
   function joinRoom(event: MouseEvent<HTMLElement>) {
     event.preventDefault();
-    socket.emit("joinRoom", {
-      roomId: inputPinRef?.current?.value,
-      userName,
-    });
+    router.push(`gameblock/${inputPinRef?.current?.value}`);
   }
 
   function handleSetName(event: MouseEvent<HTMLElement>) {
@@ -41,8 +38,6 @@ export default function JoinPage() {
 
   function handleSubmit() {
     setIsLoading(true);
-    window.history.pushState({ userName }, "", null);
-    router.push(`gameblock/${inputPinRef?.current?.value}`);
   }
 
   useEffect(() => {

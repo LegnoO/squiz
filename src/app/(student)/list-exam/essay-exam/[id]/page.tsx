@@ -32,6 +32,7 @@ import AxiosInstance from "@/config/axios";
 // ** Utils
 import { handleAxiosError } from "@/utils/errorHandler";
 import { htmlToDraftBlocks } from "@/utils/draft";
+import { useExam } from "@/context/ExamContext";
 
 // ** Types
 interface IFileProp {
@@ -63,6 +64,7 @@ interface IEssayExamData {
 // test[test.length - 2].concat(" ",test[test.length - 1].slice(0, test[test.length - 1].lastIndexOf(".")))
 export default function EssayExamPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const { essayExam, fetchEssayExam } = useExam();
   const searchParams = useSearchParams();
   const [dataAnswer, setDataAnswer] = useState<IEssayExamData>({
     _id: "",
@@ -98,42 +100,30 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
   ));
 
   const courseId = searchParams.get("idCourse");
-  const [essayExam, setEssayExam] = useState<Partial<IEssayExam>>();
+  const [essayDataExam, setEssayDataExam] = useState<Partial<IEssayExam>>();
 
   useEffect(() => {
-    const getEssayExam = async () => {
-      try {
-        const data = {
-          idEssayExam: params.id,
-          idCourse: courseId,
-        };
-
-        const res = await AxiosInstance.post(
-          `https://e-learming-be.onrender.com/essay-exam-answer/join-essay-exam/`,
-          data,
+    if (essayExam) {
+      console.log("🚀 ~ useEffect ~ essayExam:", essayExam);
+      setTimeLeft(Math.floor(essayExam.data.total_time_left));
+      setEssayDataExam(essayExam.data.data_test);
+      if (essayExam.data.isFirst) {
+        setIdAnswer(essayExam.data.essay_exam_answer_id);
+      } else {
+        setFirstJoin(false);
+        setDataAnswer(essayExam.data.data_answer);
+        setContent(dataAnswer.content_answers);
+        setIdAnswer(essayExam.data.data_test._id);
+        setEditorState(
+          htmlToDraftBlocks(essayExam.data.data_answer.content_answers),
         );
-        setTimeLeft(Math.floor(res.data.total_time_left));
-        setEssayExam(res.data.data_test);
-        if (res.data.isFirst) {
-          setIdAnswer(res.data.essay_exam_answer_id);
-        } else {
-          setFirstJoin(false);
-          setDataAnswer(res.data.data_answer);
-          setIdAnswer(res.data.data_test._id);
-          setEditorState(
-            htmlToDraftBlocks(res.data.data_answer.content_answers),
-          );
-        }
-      } catch (error) {
-        console.log(error);
-        router.back();
-        handleAxiosError(error);
       }
-    };
+    } else {
+      fetchEssayExam(params.id, courseId);
+    }
 
-    getEssayExam();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [essayExam]);
 
   function handleChangeContent(contentState: EditorState) {
     const rawState = convertToRaw(contentState.getCurrentContent());
@@ -152,6 +142,7 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
       if (isFirstJoin) {
         formData.append("content_answers", content);
         formData.append("file_essay_answer", files[0]);
+        console.log(formData);
         await AxiosInstance.post(
           `https://e-learming-be.onrender.com/essay-exam-answer/submit-essay-exam-answer/${idAnswer}`,
           formData,
@@ -162,11 +153,12 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
           },
         );
       } else {
-        formData.append("content_answers", dataAnswer.content_answers);
+        formData.append("content_answers", content);
         formData.append(
           "file_essay_answer",
           files[0] || dataAnswer.file_upload[0],
         );
+        console.log(formData);
         await AxiosInstance.put(
           `https://e-learming-be.onrender.com/essay-exam-answer/update-essay-exam-answer/${idAnswer}`,
           formData,
@@ -203,7 +195,7 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
               </button> */
   }
 
-  if (!essayExam) {
+  if (!essayDataExam) {
     return <div>Loading...</div>;
   }
 
@@ -229,14 +221,14 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
               <div className="flex flex-col gap-[6rem] pt-2 font-bold">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: essayExam?.content || "<></>",
+                    __html: essayDataExam?.content || "<></>",
                   }}
                 />
               </div>
               <div className="mt-[6rem] flex w-1/2 items-center justify-between">
                 <button
                   onClick={() => {
-                    window.open(essayExam.files);
+                    window.open(essayDataExam.files);
                   }}
                   className="flex items-center gap-1 px-2 text-[--color-text-link]">
                   <FaRegFileWord className="h-[1.25rem] w-[1.25rem] text-base" />
@@ -285,14 +277,14 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
           </div>
           <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
             <div className="mb-3 text-lg font-semibold">
-              Môn: {essayExam.title}
+              Môn: {essayDataExam.title}
             </div>
             <div className="mb-3 bg-[--background-primary-main] font-semibold text-primary">
               Chế độ: <span className="font-bold">Thi tự luận</span>
             </div>
             <div className="mb-3 bg-[--background-primary-main] text-base font-semibold text-primary">
               Thời gian làm bài:{" "}
-              <span className="font-bold">{essayExam.total_time} phút</span>
+              <span className="font-bold">{essayDataExam.total_time} phút</span>
             </div>
             <div className="mb-4 flex items-center gap-2 text-xl font-bold text-primary">
               <span className="font-medium">Thời gian:</span>

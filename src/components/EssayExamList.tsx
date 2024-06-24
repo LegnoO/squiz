@@ -12,13 +12,11 @@ import { IEssayList } from "@/types/Essay";
 import AxiosInstance from "@/config/axios";
 import { toast } from "react-toastify";
 import { handleAxiosError } from "@/utils/errorHandler";
+import { useExam } from "@/context/ExamContext";
 
 const EssayExamList = ({ essayList }: { essayList: IEssayList[] }) => {
   const router = useRouter();
-
-  async function enterExam(essayId: string, courseId: string) {
-    router.push(`/list-exam/essay-exam/${essayId}?idCourse=${courseId}`);
-  }
+  const { fetchEssayExam, isLoading } = useExam();
 
   return (
     <section className="list-essay">
@@ -60,7 +58,8 @@ const EssayExamList = ({ essayList }: { essayList: IEssayList[] }) => {
               </CardContent>
               <CardFooter>
                 <Button
-                  onClick={() => enterExam(essay._id, essay.course_id)}
+                  disabled={isLoading}
+                  onClick={() => fetchEssayExam(essay._id, essay.course_id)}
                   className="w-full text-lg">
                   Bắt đầu thi
                 </Button>

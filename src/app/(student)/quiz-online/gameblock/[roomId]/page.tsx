@@ -60,11 +60,14 @@ export default function GameBlockPage({
   const userEmail = userData ? userData.email : null;
   const userName = userEmail ? userEmail.split("@")[0] : "";
 
-  function handleAnswerSelect(index: number) {
-    console.log({
+  function joinRoom() {
+    socket.emit("joinRoom", {
       roomId: params.roomId,
-      answerIndex: index,
+      userName,
     });
+  }
+
+  function handleAnswerSelect(index: number) {
     if (answerCorrect.correctAnswerIndex === null && selectAnswer === null) {
       setSelectAnswer(index);
 
@@ -101,6 +104,11 @@ export default function GameBlockPage({
     return buttonStyles;
   }
 
+  useEffect(() => {
+    joinRoom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const renderInstruction = () => {
     return (
       <div className="h-full w-full">
@@ -115,8 +123,6 @@ export default function GameBlockPage({
             <div className="mt-3 text-base font-bold">
               You are in! See your nickname on screen?
             </div>
-
-            {/* {window.history.state.userName} */}
           </main>
         </div>
       </div>
@@ -150,7 +156,7 @@ export default function GameBlockPage({
     });
 
     socket.on("countdown", (countdown) => {
-      setFirstJoin(false)
+      setFirstJoin(false);
       setCountdown(countdown);
       if (countdown > 0 && questionLength === 0) {
         setIsLoading(true);

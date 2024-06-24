@@ -31,9 +31,12 @@ import { handleAxiosError } from "@/utils/errorHandler";
 // ** Hooks
 import { useRouter } from "next-nprogress-bar";
 
+// ** Context
+import { useExam } from "@/context/ExamContext";
 
 export default function QuizExamPage({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const { quizExam, fetchQuizExam } = useExam();
   const [quizAnswerId, setQuizAnswerId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
@@ -55,46 +58,31 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
   });
 
   useEffect(() => {
-    const getQuizExam = async () => {
-      try {
-        const res = await AxiosInstance.post(
-          "https://e-learming-be.onrender.com/quiz-exam/get/quiz-exam",
-          {
-            quiz_id: params.id,
-          },
-        );
-        
-        setTitle(res.data.res.title);
-        setQuizAnswerId(res.data.res.quiz_answer_id);
+    if (quizExam) {
+      setTitle(quizExam.data.res.title);
+      setQuizAnswerId(quizExam.data.res.quiz_answer_id);
+      setQuizAnswer((prev) => ({
+        ...prev,
+        quiz_exam_id: quizExam.data.res.quiz_exam_id,
+      }));
+
+      setTimeRemaining(Math.floor(Number(quizExam.data.res.time_remaining)));
+      setTotalTime(quizExam.data.res.total_time);
+      if (quizExam.data.res.isFirst) {
+        setQuizQuestion(quizExam.data.res.dataExam);
+      } else {
+        setQuizQuestion(quizExam.data.res.dataExam.map((x: any) => x.question));
+
         setQuizAnswer((prev) => ({
           ...prev,
-          quiz_exam_id: res.data.res.quiz_exam_id,
+          answers: quizExam.data.res.dataExam,
         }));
-
-        setTimeRemaining(Math.floor(Number(res.data.res.time_remaining)));
-        setTotalTime(res.data.res.total_time);
-        if (res.data.res.isFirst) {
-          setQuizQuestion(res.data.res.dataExam);
-        } else {
-          setQuizQuestion(res.data.res.dataExam.map((x: any) => x.question));
-        
-          setQuizAnswer((prev) => ({
-            ...prev,
-            answers:res.data.res.dataExam,
-          }));
-     
-          
-        }
-      } catch (error) {
-        router.back();
-        handleAxiosError(error);
       }
-  
-    };
-
-    getQuizExam();
+    } else {
+      fetchQuizExam(params.id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [quizExam]);
 
   const handleUpdateAnswer = async (next: "next" | null) => {
     if (quizAnswer.answers.length > 0) {
@@ -201,6 +189,11 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
               Thời gian làm bài:{" "}
               <span className="font-bold">{totalTime} phút</span>
             </div>
+            <button
+              onClick={() => router.back()}
+              className="mb-3 rounded bg-destructive px-3 py-2 font-semibold text-destructive-foreground transition duration-200 hover:scale-110">
+              Rời khỏi
+            </button>
           </div>
           <div className="quiz-slide relative w-full max-w-[45rem] rounded-lg bg-white pb-[1rem] shadow-md xl:max-w-[45rem] [&_.carousel-slider]:rounded-md [&_.control-arrow]:hover:bg-transparent">
             <Carousel

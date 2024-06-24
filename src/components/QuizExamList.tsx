@@ -1,6 +1,3 @@
-// ** Next Imports
-import { useRouter } from "next-nprogress-bar";
-
 // ** Shadcn UI components
 import {
   Card,
@@ -15,13 +12,10 @@ import { Button } from "@/components/ui/button";
 import { IQuizList } from "@/types/Quiz";
 
 // ** Config
-import AxiosInstance from "@/config/axios";
+import { useExam } from "@/context/ExamContext";
 
 const QuizExamList = ({ quizList }: { quizList: IQuizList[] }) => {
-  const router = useRouter();
-  async function enterExam(quizID: string) {
-    router.push(`/list-exam/quiz-exam/${quizID}`);
-  }
+  const { fetchQuizExam, isLoading } = useExam();
 
   return (
     <section className="list-quiz">
@@ -63,7 +57,8 @@ const QuizExamList = ({ quizList }: { quizList: IQuizList[] }) => {
               </CardContent>
               <CardFooter>
                 <Button
-                  onClick={() => enterExam(quiz._id)}
+                  disabled={isLoading}
+                  onClick={() => fetchQuizExam(quiz._id)}
                   className="w-full text-lg">
                   Bắt đầu thi
                 </Button>
