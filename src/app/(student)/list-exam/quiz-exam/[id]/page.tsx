@@ -175,11 +175,10 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="h-screen bg-[--background-surface-color]">
-      <Header />
-      <div className="h-full w-full pt-[2rem]">
-        <div className="flex justify-center gap-4 px-[1.5rem]">
-          <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
+    <div className="h-screen bg-white">
+      <div className="min-h-full w-full py-[2rem]">
+        <div className="flex flex-col justify-center gap-4 px-[1rem] lg:flex-row lg:px-[1.5rem]">
+          <div className="border relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pt-[2rem] shadow-md">
             <div className="mb-3 text-lg font-semibold">Môn: {title}</div>
 
             <div className="mb-3 bg-[--background-primary-main] font-semibold text-primary">
@@ -195,7 +194,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
               Rời khỏi
             </button>
           </div>
-          <div className="quiz-slide relative w-full max-w-[45rem] rounded-lg bg-white pb-[1rem] shadow-md xl:max-w-[45rem] [&_.carousel-slider]:rounded-md [&_.control-arrow]:hover:bg-transparent">
+          <div className="border quiz-slide relative w-full max-w-[45rem] rounded-lg bg-white shadow-md xl:max-w-[45rem] [&_.carousel-slider]:rounded-md [&_.control-arrow]:hover:bg-transparent">
             <Carousel
               renderArrowPrev={(clickHandler, hasNext, labelNext) =>
                 hasNext && <div></div>
@@ -218,7 +217,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                     className="h-full bg-[--background-primary-main] pb-[1.5rem]">
                     <div className="flex min-h-[23rem] flex-col justify-between text-primary">
                       <div className="bg-white text-left font-medium">
-                        <div className="px-[2rem] py-[1.5rem] text-left text-2xl font-semibold text-primary">
+                        <div className="px-[1rem] py-[1.5rem] text-left text-2xl font-semibold text-primary lg:px-[2rem]">
                           <h3 className="mb-2 text-left">Câu {slide + 1}:</h3>
                           <div
                             dangerouslySetInnerHTML={{
@@ -228,7 +227,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                         </div>
                         <div className="border-break h-[1px] w-full"></div>
                       </div>
-                      <div className="mt-[3rem] px-[2.5rem]">
+                      <div className="mt-[3rem] px-[1rem] lg:px-[2.5rem]">
                         <h4 className="mb-4 text-left text-sm font-semibold md:text-base">
                           Chọn định nghĩa đúng
                         </h4>
@@ -242,7 +241,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                                   handleSelectAnswer(_id, index);
                                 }}
                                 key={content}
-                                className={`${checkAnswer(_id, index) ? "bg-gray-300 text-primary opacity-85 hover:opacity-100" : "hover:bg-gray-100"} flex gap-2 rounded border border-[--border-primary-main] bg-[--background-primary-main] p-3 text-left font-semibold text-primary shadow-sm transition`}>
+                                className={`${checkAnswer(_id, index) ? "bg-gray-200 text-primary opacity-85 hover:opacity-100" : "hover:bg-gray-300"} flex gap-2 rounded border border-[--border-primary-main] bg-[--background-primary-main] p-3 text-left font-semibold text-primary shadow-sm transition`}>
                                 <span className="font-bold">
                                   {label[index].toUpperCase()}.
                                 </span>
@@ -264,14 +263,14 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                                 prev > 0 ? prev - 1 : prev,
                               );
                             }}
-                            className={`${!(currentSlide > 0) && "opacity-25"} flex items-center gap-2 rounded-md bg-[--color-text-link] px-4 py-2.5 font-medium text-white`}>
-                            <span className="rounded-full bg-white text-[--color-text-link]">
+                            className={`${!(currentSlide > 0) && "opacity-25"} flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 font-medium text-primary-foreground`}>
+                            <span className="rounded-full bg-white text-primary">
                               <GrFormPreviousLink />
                             </span>
                             <span>Trước</span>
                           </button>
                           {isLoading ? (
-                            <button className="flex items-center gap-2 rounded-md bg-[--color-text-link] px-4 py-2 font-medium text-white">
+                            <button className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground">
                               <ColorRing
                                 visible={true}
                                 height="30"
@@ -296,9 +295,9 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                               onClick={() => {
                                 handleUpdateAnswer("next");
                               }}
-                              className={`${!(currentSlide < quizQuestion.length - 1) && "opacity-25"} flex items-center gap-2 rounded-md bg-[--color-text-link] px-4 py-2.5 font-medium text-white`}>
+                              className={`${!(currentSlide < quizQuestion.length - 1) && "opacity-25"} flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 font-medium text-primary-foreground`}>
                               <span>Sau</span>
-                              <span className="rounded-full bg-white text-[--color-text-link]">
+                              <span className="rounded-full bg-white text-primary">
                                 <GrFormNextLink />
                               </span>
                             </button>
@@ -311,7 +310,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
               })}
             </Carousel>
           </div>
-          <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
+          <div className="border relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pt-[2rem] shadow-md">
             <div className="mb-4 flex items-center gap-2 text-xl font-bold text-primary">
               <span>Thời gian:</span>
               {timeRemaining && (
@@ -325,7 +324,7 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
 
                 return (
                   <button
-                    className={`${isLoading ? "opacity-40" : "opacity-100"}`}
+                    className={`flex items-center justify-center rounded px-2.5 py-1.5 outline outline-2 ${isLoading ? "opacity-40" : "opacity-100"} ${currentSlide === index ? "outline-primary" : "outline-secondary"} ${checkAnswerNav(_id) ? "bg-secondary" : ""}`}
                     disabled={isLoading}
                     onClick={() => {
                       handleUpdateAnswer(null);
@@ -333,11 +332,9 @@ export default function QuizExamPage({ params }: { params: { id: string } }) {
                     }}
                     key={index}>
                     <div
-                      className={`${currentSlide === index ? "border-[2px] border-black" : "border border-black"} border font-semibold text-primary shadow-sm`}>
-                      <p className="h-[2rem] w-[1.75rem]">{index + 1}</p>
+                      className={`font-semibold text-secondary-foreground shadow-sm`}>
+                      <p className="">{index + 1}</p>
                     </div>
-                    <div
-                      className={`h-[0.75rem] w-full border-t-0 ${currentSlide === index ? "border-[2px] border-black" : "border border-black"} ${checkAnswerNav(_id) ? "bg-[#52bcec]" : ""}`}></div>
                   </button>
                 );
               })}

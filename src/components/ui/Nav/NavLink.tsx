@@ -1,23 +1,27 @@
 "use client";
 
-import { ReactNode } from 'react'
+import { ReactNode } from "react";
 import Link from "next/link";
-import styles from "./styles/NavLink.module.scss"
+import styles from "./styles/NavLink.module.scss";
+import { usePathname } from "next/navigation";
 
 interface IProps {
-    href: string,
-    active?: boolean,
-    children: ReactNode
+  href: string;
+  className?: string;
+  children: ReactNode;
 }
 
-const NavLink = ({ href = "", children, active , ...rest }: IProps) => {
-    return (
-        <li className={`${styles.NavLink}${active ? ` ${styles.NavLinkActive}` : ''}`} {...rest}>
-            <Link href={href}>{children}</Link>
-            <div className={styles.NavLinkDropdown}>
-            </div>
-        </li>
-    )
-}
+const NavLink = ({ className, href = "", children, ...rest }: IProps) => {
+  const pathname = usePathname();
 
-export default NavLink
+  return (
+    <li
+      className={`${styles.NavLink}${pathname.startsWith(href) ? ` ${styles.NavLinkActive}` : ""} ${className}`}
+      {...rest}>
+      <Link href={href}>{children}</Link>
+      <div className={styles.NavLinkDropdown}></div>
+    </li>
+  );
+};
+
+export default NavLink;

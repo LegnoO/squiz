@@ -18,7 +18,7 @@ import { FaGraduationCap } from "react-icons/fa6";
 import { TfiSearch } from "react-icons/tfi";
 
 // ** Components
-import { Navbar } from "./ui/Nav";
+import { Navbar, NavList, NavLink } from "./ui/Nav";
 import AvatarMenu from "./AvatarMenu";
 
 // ** Context
@@ -30,8 +30,6 @@ const Header = () => {
   const { user } = useAuth();
   const [mobileNav, setMobileNav] = useState<boolean>(false);
   const isMobileScreen = useMediaQuery({ query: "(max-width: 800px)" });
-
-
 
   useEffect(() => {
     setIsMounted(true);
@@ -60,6 +58,15 @@ const Header = () => {
                   </h1>
                 )}
               </div>
+              {user ? (
+                <NavList>
+                  <NavLink href="/">Trang chủ</NavLink>
+                  <NavLink href="/quiz-online/join">Thi trực tuyến</NavLink>
+                  
+                </NavList>
+              ) : (
+                <></>
+              )}
             </div>
 
             <div className="flex h-[3.5rem] items-center gap-4 pr-2">

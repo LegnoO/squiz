@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 
 // ** Next Imports
 import Image from "next/image";
+import Link from "next/link";
 
 // ** Context
 import { useAuth } from "@/context/AuthContext";
@@ -19,7 +20,11 @@ export default function Sidebar({
   toggleSidebar: Dispatch<SetStateAction<boolean>>;
   isOpen: boolean;
 }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <>
@@ -32,7 +37,7 @@ export default function Sidebar({
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className={`sidebar fixed left-0 top-0 z-[20] h-full w-6/12 overflow-y-scroll transition-all duration-300 ${isOpen ? "nav_open visible translate-x-[0] opacity-100" : "nav_close invisible -translate-x-[100%] opacity-0"}`}>
+          className={`sidebar fixed left-0 top-0 z-[20] w-6/12 transition-all duration-300 ${isOpen ? "nav_open visible translate-x-[0] opacity-100" : "nav_close invisible -translate-x-[100%] opacity-0"}`}>
           <div className="bg-[#f7f9fa] p-4 transition-all duration-300">
             <div className="flex items-center">
               <div className="flex w-[95%] items-center gap-3">
@@ -53,11 +58,11 @@ export default function Sidebar({
                   </p>
                 </div>
               </div>
-              <div className="flex-1">
+              {/* <div className="flex-1">
                 <button className="text-xl">
                   <MdOutlineKeyboardArrowRight />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="h-full w-full bg-white">
@@ -67,37 +72,30 @@ export default function Sidebar({
                   <h2 className="mb-2 text-sm font-bold text-gray-500">
                     Learn
                   </h2>
-                  <p className="my-3 font-medium">My learning</p>
+                  <Link href="/">
+                    <p className="my-3 font-medium">Kết quả</p>
+                  </Link>
                 </div>
                 <div className="border-break">
                   <div className="p-3">
                     <h2 className="mb-2 text-sm font-bold text-gray-500">
-                      Most popular
+                      Phổ biến
                     </h2>
                     <div>
                       <div className="mb-3 flex cursor-pointer items-center font-medium">
-                        <p>Web Development</p>
-                        <div className="flex w-fit flex-1 justify-end">
+                        <Link href="/">
+                          <p>Trang chủ</p>
+                        </Link>
+                        {/* <div className="flex w-fit flex-1 justify-end">
                           <button className="text-lg text-black">
                             <MdOutlineKeyboardArrowRight />
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="mb-3 flex cursor-pointer items-center font-medium">
-                        <p>Web Development</p>
-                        <div className="flex w-fit flex-1 justify-end">
-                          <button className="text-lg text-black">
-                            <MdOutlineKeyboardArrowRight />
-                          </button>
-                        </div>
-                      </div>
-                      <div className="mb-3 flex cursor-pointer items-center font-medium">
-                        <p>Web Development</p>
-                        <div className="flex w-fit flex-1 justify-end">
-                          <button className="text-lg text-black">
-                            <MdOutlineKeyboardArrowRight />
-                          </button>
-                        </div>
+                        <Link href="/quiz-online/join">
+                          <p>Thi trực tuyến</p>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -105,17 +103,17 @@ export default function Sidebar({
                 <div className="border-break">
                   <div className="p-3">
                     <h2 className="mb-2 text-sm font-bold text-gray-500">
-                      Profile
+                      Chỉnh sửa
                     </h2>
                     <div>
                       <div className="mb-3 font-medium">
-                        <button>
-                          <p>Edit profile</p>
-                        </button>
+                        <Link href="/settings">
+                          <p>Hồ sơ</p>
+                        </Link>
                       </div>
                       <div className="mb-3 font-medium">
-                        <button>
-                          <p>Logout</p>
+                        <button onClick={logout}>
+                          <p>Đăng xuất</p>
                         </button>
                       </div>
                     </div>

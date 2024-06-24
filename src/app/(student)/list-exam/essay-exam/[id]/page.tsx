@@ -104,7 +104,6 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (essayExam) {
-      console.log("🚀 ~ useEffect ~ essayExam:", essayExam);
       setTimeLeft(Math.floor(essayExam.data.total_time_left));
       setEssayDataExam(essayExam.data.data_test);
       if (essayExam.data.isFirst) {
@@ -200,10 +199,9 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="bg-[--background-surface-color]">
-      <Header />
+    <div className="bg-white">
       <div className="h-full w-full pb-[3rem] pt-[2rem]">
-        <div className="flex justify-center gap-4 pr-[1.5rem] md:pl-[2.5rem]">
+        <div className="flex flex-col justify-center gap-4 px-[1rem] lg:flex-row lg:px-[2rem]">
           {/* <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
             <div className="mb-3 text-lg font-semibold">
               Môn: Toán cao cấp
@@ -216,7 +214,10 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
             </div>
 
           </div> */}
-          <div className="essay-slide relative min-h-[35rem] w-[70%] rounded-lg bg-white pb-[1rem] shadow-lg [&_.carousel-slider]:rounded-md [&_.control-arrow]:hover:bg-transparent">
+          <div className="fw-bold flex w-full items-center justify-center rounded bg-white py-2 shadow-md lg:hidden">
+            {timeLeft && <CountdownTimer targetDate={timeLeft * 1000} />}
+          </div>
+          <div className="essay-slide relative min-h-[35rem] w-full rounded-lg border bg-white pb-[1rem] shadow-lg lg:w-[70%] [&_.carousel-slider]:rounded-md [&_.control-arrow]:hover:bg-transparent">
             <div className="flex flex-col gap-8 p-4">
               <div className="flex flex-col gap-[6rem] pt-2 font-bold">
                 <div
@@ -275,7 +276,7 @@ export default function EssayExamPage({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-          <div className="relative flex-1 rounded bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
+          <div className="relative flex-1 rounded border bg-[--background-primary-main] px-[1rem] pb-[2.5rem] pt-[2rem] shadow-md">
             <div className="mb-3 text-lg font-semibold">
               Môn: {essayDataExam.title}
             </div>
